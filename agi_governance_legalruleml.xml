@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  AGI GOVERNANCE COMPLIANCE MODEL — LegalRuleML Encoding
+  ============================================================================
+  Document:    agi_governance_legalruleml.xml
+  Version:     1.0
+  Authors:     Corona Fraga, P.; Diab, A.M.E-A.; Hwang, S.H.; Diaz, V.
+  Base spec:   OASIS LegalRuleML Core Specification 1.0
+               (Athan et al., 2015; https://docs.oasis-open.org/legalruleml/)
+  RuleML spec: RuleML 1.02 (http://ruleml.org/spec)
+  Extension:   AGI Evidence Vocabulary (agiev) v1.0 — new artifact types and
+               lifecycle provenance/confidence fields not present in prior
+               LegalRuleML formalisms.
+
+  Contents:
+    PART 0 — Namespace and prefix declarations
+    PART 1 — AGI Evidence Artifact Type Declarations (novel extension)
+    PART 2 — Norm Encodings (three representative AGI-specific norms)
+               N-TRANS-AI-ID  : AI identity disclosure (Transparency)
+               N-CTRL-CEASE   : Cessation mechanism (Human Control)
+               N-CTRL-SLO     : Self-learning oversight (Human Control)
+    PART 3 — Indicator Predicate Bindings (norm → indicator traceability)
+
+  Note on PART 1 typing convention:
+    LegalRuleML does not prescribe an internal schema for evidence objects.
+    We represent each artifact type as a named lrml:Reference, with field
+    semantics documented in XML comments. Implementers instantiate these
+    as JSON-LD objects conforming to the agiev vocabulary (a full XSD/JSON
+    Schema definition is out of scope for this specification document).
+  ============================================================================
+-->
+
+<lrml:LegalRuleML
+  xmlns:lrml  = "http://docs.oasis-open.org/legalruleml/ns/v1.0/"
+  xmlns:ruleml= "http://ruleml.org/spec"
+  xmlns:xsd   = "http://www.w3.org/2001/XMLSchema#"
+  xmlns:agiev = "https://w3id.org/agi-governance/evidence/ns/v1.0/"
+  xml:base    = "https://w3id.org/agi-governance/norms/">
+
+
+  <!-- ========================================================================
+       PART 1 — AGI EVIDENCE ARTIFACT TYPE DECLARATIONS
+       Extension of the standard LegalRuleML evidence model.
+
+       Prior LegalRuleML work (Athan et al., 2015; Lam & Hashmi, 2019)
+       represents evidence sources as generic lrml:Reference elements
+       without lifecycle-stage semantics, confidence scores, or provenance
+       links.  The agiev types below add three orthogonal extensions:
+
+         (E1) lifecycle_stage — situates the artifact within the AI
+              governance lifecycle (design / training / evaluation /
+              deployment / operation), enabling time-ordered compliance
+              checks across a system's lifespan.
+
+         (E2) confidence [0.0–1.0] — supports risk-based reasoning when
+              evidence is incomplete or contested, and allows the compliance
+              checker to flag low-confidence artifacts for human review.
+
+         (E3) provenance — a xsd:anyURI field whose value, when populated
+              by a deploying organization, is intended to be a
+              dereferenceable link to the process, tool, or repository
+              that produced this artifact, enabling third-party
+              verification and legal defensibility.  The agiev vocabulary
+              specification (this file) defines the field type and
+              semantics; the dereferenceability guarantee applies to
+              values supplied in deployed artifact instances, not to the
+              vocabulary namespace URI itself.  The agiev namespace and
+              governance norm base URI are published as stable persistent
+              identifiers via w3id.org (see root xmlns:agiev and xml:base
+              declarations); the vocabulary definition document is
+              maintained at https://github.com/coronafraga/agi-governance
+              and registered at https://w3id.org/agi-governance.
+
+       Additionally, three artifact types are entirely novel to AGI
+       governance and have no equivalent in prior AI & Law formalisms:
+         agiev:SelfLearningAuditRecord  (for N-CTRL-SLO)
+         agiev:CessationTestRecord      (sub-artifact of RedTeamingReport)
+         agiev:AIIdentityTestRecord     (sub-artifact of RuntimeTelemetryLog)
+       ======================================================================== -->
+
+  <lrml:References>
+
+    <!-- ──────────────────────────────────────────────────────────────────────
+         ABSTRACT BASE TYPE — agiev:AGIEvidenceArtifact
+         All concrete artifact types below extend this base.
+         ────────────────────────────────────────────────────────────────────── -->
+    <lrml:Reference key="agiev:AGIEvidenceArtifact">
+      <!--
+        Fields (all concrete artifact types inherit these):
+
+        artifactId          : xsd:string
+          Unique identifier for this artifact instance (e.g., UUID or
+          organization-assigned document number).
+
+        artifactType        : agiev:ArtifactTypeEnum
+          Controlled vocabulary: {ModelCard, RedTeamingReport,
+          RuntimeTelemetryLog, SelfLearningAuditRecord, IncidentReport,
+          DataProvenanceRecord, ThirdPartyAuditAttestation}
+
+        issuedBy            : xsd:string
+          Name or identifier of the responsible issuing entity or
+          individual (developer, auditor, governor).
+
+        issuedAt            : xsd:dateTime
+          ISO 8601 creation timestamp of the artifact.
+
+        scope               : xsd:string
+          The system, component, or deployment context covered by
+          this artifact (e.g., "LegalAssistant-v2.1-inference-module").
+
+        lifecycle_stage     : agiev:LifecycleStageEnum
+          [EXTENSION E1] One of: {design, training, evaluation,
+          deployment, operation}.  Absent from prior LegalRuleML
+          evidence representations.
+
+        confidence          : xsd:decimal [0.0 – 1.0]
+          [EXTENSION E2] Issuer's confidence in the completeness and
+          accuracy of this artifact.  0.0 = fully contested/incomplete;
+          1.0 = independently verified.
+
+        provenance          : xsd:anyURI
+          [EXTENSION E3] When populated by a deploying organization,
+          a dereferenceable link to the process, tool, or repository
+          that produced this artifact.  Implementers MUST supply a
+          resolvable URI for each artifact instance; the vocabulary
+          namespace URI (xmlns:agiev) is a schema identifier and is
+          distinct from the per-instance provenance value.
+      -->
+    </lrml:Reference>
+
+
+    <!-- ──────────────────────────────────────────────────────────────────────
+         ARTIFACT TYPE 1 — agiev:ModelCard
+         Extends: agiev:AGIEvidenceArtifact
+         Lifecycle stages covered: design, evaluation, deployment
+         ────────────────────────────────────────────────────────────────────── -->
+    <lrml:Reference key="agiev:ModelCard">
+      <!--
+        Inherits all AGIEvidenceArtifact fields, plus:
+
+        model_id                        : xsd:string
+          Unique identifier for the model version described.
+
+        intended_uses                   : xsd:string
+          Documented intended use cases and deployment contexts.
+
+        out_of_scope_uses               : xsd:string
+          Explicitly enumerated disallowed deployment contexts.
+
+        known_limitations               : xsd:string
+          Documented capability bounds, failure modes, and
+          performance degradation conditions.
+
+        evaluation_datasets             : xsd:string
+          Reference to evaluation benchmarks and dataset versions.
+
+        explainability_methods          : xsd:string
+          Methods used to generate explanations (e.g., SHAP, LIME,
+          attention visualization).
+
+        ai_identity_disclosure_mechanism : xsd:boolean
+          [AGI-SPECIFIC] Whether the model has a reliable, tested
+          mechanism to self-identify as an AI upon query.
+          Required for compliance with N-TRANS-AI-ID.
+          This field has no precedent in prior model card standards
+          (Mitchell et al., 2019; Chmielinski et al., 2024).
+
+        cessation_mechanism_documented  : xsd:boolean
+          [AGI-SPECIFIC] Whether the model card documents the
+          cessation (kill-switch) mechanism and its priority over
+          operational directives.  Required for N-CTRL-CEASE.
+      -->
+    </lrml:Reference>
+
+
+    <!-- ──────────────────────────────────────────────────────────────────────
+         ARTIFACT TYPE 2 — agiev:RedTeamingReport
+         Extends: agiev:AGIEvidenceArtifact
+         Lifecycle stages covered: evaluation, deployment
+         ────────────────────────────────────────────────────────────────────── -->
+    <lrml:Reference key="agiev:RedTeamingReport">
+      <!--
+        Inherits all AGIEvidenceArtifact fields, plus:
+
+        test_set_id                     : xsd:string
+          Identifier for the annotated adversarial test set used.
+
+        adversarial_scenarios_count     : xsd:integer
+          Total number of adversarial test scenarios executed.
+
+        harm_categories_tested          : xsd:string
+          Harm taxonomy applied (e.g., per Wachter et al., 2021).
+
+        safeguard_activation_rate       : xsd:decimal [0.0 – 1.0]
+          Proportion of adversarial outputs blocked or modified
+          by harm-prevention controls.
+
+        cessation_compliance_rate       : xsd:decimal [0.0 – 1.0]
+          [AGI-SPECIFIC] Proportion of valid stop-command events
+          to which the system responded with full cessation of all
+          directives, measured under both normal and adversarial
+          conditions.  This field is novel: no existing red-teaming
+          report schema includes a cessation-specific compliance
+          metric (Perez et al., 2022).
+
+        mean_time_to_cessation_s        : xsd:decimal
+          [AGI-SPECIFIC] Mean elapsed time (seconds) from
+          stop-command receipt to confirmed full cessation.
+
+        identity_deception_attempts     : xsd:integer
+          [AGI-SPECIFIC] Number of adversarial prompts designed
+          to elicit the system to misrepresent itself as human.
+
+        identity_deception_failures     : xsd:integer
+          [AGI-SPECIFIC] Number of cases where the system failed
+          to correctly self-identify as AI under adversarial probing.
+      -->
+    </lrml:Reference>
+
+
+    <!-- ──────────────────────────────────────────────────────────────────────
+         ARTIFACT TYPE 3 — agiev:RuntimeTelemetryLog
+         Extends: agiev:AGIEvidenceArtifact
+         Lifecycle stages covered: deployment, operation
+         ────────────────────────────────────────────────────────────────────── -->
+    <lrml:Reference key="agiev:RuntimeTelemetryLog">
+      <!--
+        Inherits all AGIEvidenceArtifact fields, plus:
+
+        log_period_start                : xsd:dateTime
+        log_period_end                  : xsd:dateTime
+
+        decisions_total                 : xsd:integer
+          Total operational decisions issued during the period.
+
+        decisions_with_explanation      : xsd:integer
+          Decisions for which an interpretable explanation artifact
+          was generated and stored.
+
+        identity_queries_received       : xsd:integer
+          [AGI-SPECIFIC] Total queries in which a human user asked
+          whether the system is human or AI.
+
+        identity_correctly_disclosed    : xsd:integer
+          [AGI-SPECIFIC] Queries answered with correct AI
+          self-identification.  Used to compute the identity
+          disclosure rate indicator for N-TRANS-AI-ID.
+
+        anomaly_events                  : xsd:integer
+          Runtime events flagged as out-of-distribution or
+          anomalous by the monitoring subsystem.
+
+        cessation_commands_received     : xsd:integer
+          [AGI-SPECIFIC] Authorized stop-commands received.
+
+        cessation_commands_honored      : xsd:integer
+          [AGI-SPECIFIC] Stop-commands for which full cessation
+          was confirmed within the operational threshold T_cease.
+
+        cessation_mean_response_s       : xsd:decimal
+          [AGI-SPECIFIC] Mean operational response time to
+          stop-commands (seconds).
+      -->
+    </lrml:Reference>
+
+
+    <!-- ──────────────────────────────────────────────────────────────────────
+         ARTIFACT TYPE 4 — agiev:SelfLearningAuditRecord
+         [ENTIRELY NOVEL — no equivalent in prior LegalRuleML work or
+          AI governance formalisms]
+         Extends: agiev:AGIEvidenceArtifact
+         Lifecycle stages covered: deployment, operation
+         ────────────────────────────────────────────────────────────────────── -->
+    <lrml:Reference key="agiev:SelfLearningAuditRecord">
+      <!--
+        This artifact type has no precedent in existing AI governance
+        evidence models, management-system standards (ISO/IEC 42001:2023),
+        or LegalRuleML formalisms.  It is required specifically because
+        AGI-class systems capable of autonomous knowledge acquisition (Lake
+        et al., 2017; Hughes et al., 2024) introduce a governance event
+        class — the knowledge acquisition event (KAE) — that is absent
+        from current compliance checking frameworks.
+
+        Inherits all AGIEvidenceArtifact fields, plus:
+
+        knowledge_acquisition_events    : xsd:integer
+          Total KAEs detected by the system during the reporting period.
+          A KAE is any event in which the system acquires new knowledge,
+          modifies its goal structure, or develops an emergent capability
+          that was not present at the last governed checkpoint.
+
+        events_submitted_for_review     : xsd:integer
+          KAEs for which the system generated and dispatched a review
+          notification to the designated human governor.
+
+        events_approved_by_governor     : xsd:integer
+          KAEs for which the human governor issued an acceptability
+          determination prior to the knowledge being integrated into
+          operational behavior.
+
+        events_integrated_without_review: xsd:integer
+          KAEs integrated into operational behavior without prior
+          governor approval.  Any value > 0 constitutes a norm
+          violation under N-CTRL-SLO.
+
+        governor_id                     : xsd:string
+          Identifier of the designated human governor responsible
+          for reviewing KAEs.
+
+        review_latency_mean_hours       : xsd:decimal
+          Mean elapsed time (hours) between KAE submission and
+          governor determination.
+
+        confidence                      : xsd:decimal [0.0 – 1.0]
+          Confidence in the completeness of KAE detection.  Systems
+          with partial observability of their own learning processes
+          should report confidence < 1.0, triggering a human audit
+          recommendation in the compliance report.
+      -->
+    </lrml:Reference>
+
+
+    <!-- ──────────────────────────────────────────────────────────────────────
+         ARTIFACT TYPE 5 — agiev:IncidentReport
+         Extends: agiev:AGIEvidenceArtifact
+         Lifecycle stages covered: deployment, operation
+         ────────────────────────────────────────────────────────────────────── -->
+    <lrml:Reference key="agiev:IncidentReport">
+      <!--
+        Inherits all AGIEvidenceArtifact fields, plus:
+
+        incident_id                     : xsd:string
+        severity                        : agiev:SeverityEnum
+          {low, medium, high, critical}
+
+        harm_category                   : xsd:string
+          Category from the deployed harm taxonomy
+          (Wachter et al., 2021).
+
+        root_cause                      : xsd:string
+          Description of the root cause of the incident.
+
+        norm_violated                   : xsd:IDREF
+          Reference to the norm key (e.g., N-TRANS-AI-ID,
+          N-CTRL-CEASE, N-CTRL-SLO) whose violation contributed
+          to or constituted the incident.
+
+        remediation_applied             : xsd:boolean
+          Whether a documented remediation action was implemented.
+
+        remediation_reference           : xsd:anyURI
+          Link to the remediation action record.
+      -->
+    </lrml:Reference>
+
+  </lrml:References>
+
+
+  <!-- ========================================================================
+       PART 2 — NORM ENCODINGS
+       Three representative AGI-specific norms encoded in LegalRuleML
+       with full deontic modality, condition, requirement, exception,
+       and evidence context bindings.
+
+       Norm keys follow the pattern: N-{PRINCIPLE}-{CONTROL}
+         TRANS  = Transparency
+         CTRL   = Human Control
+         AI-ID  = AI identity disclosure
+         CEASE  = Cessation mechanism
+         SLO    = Self-learning oversight
+       ======================================================================== -->
+
+  <lrml:Statements>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         NORM N-TRANS-AI-ID
+         Principle:   Transparency — AI Identity Disclosure
+         Modality:    Obligation
+         Source:      Diab et al. (2024); Kasirzadeh & Gabriel (2023)
+         Subject:     Operator of an AGI system
+         Condition:   The system receives an identity query from a human user
+         Requirement: The system self-identifies as an AI agent,
+                      unconditionally and without exception
+         Deadline:    Immediate (at time of query)
+         Exception:   None — self-identification admits no override
+         Evidence:    agiev:RuntimeTelemetryLog, agiev:ModelCard,
+                      agiev:RedTeamingReport (identity_deception fields)
+         Indicator:   IND-TRANS-AI-ID
+                      m(E,S) = identity_correctly_disclosed
+                                / identity_queries_received
+                      τ = 1.00  [unconditional: every query must be answered]
+         ════════════════════════════════════════════════════════════════════════ -->
+
+    <lrml:PrescriptiveStatement key="N-TRANS-AI-ID">
+      <lrml:Obligation>
+        <ruleml:Rule key="N-TRANS-AI-ID-rule">
+
+          <ruleml:if>
+            <ruleml:And>
+
+              <!-- Subject predicate: S is an AGI-class system -->
+              <ruleml:Atom>
+                <ruleml:Rel>isAGISystem</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Trigger predicate: S receives identity query Q -->
+              <ruleml:Atom>
+                <ruleml:Rel>receivesIdentityQuery</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>Q</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Context predicate: Q is initiated by a human user -->
+              <ruleml:Atom>
+                <ruleml:Rel>isHumanInitiated</ruleml:Rel>
+                <ruleml:Var>Q</ruleml:Var>
+              </ruleml:Atom>
+
+            </ruleml:And>
+          </ruleml:if>
+
+          <ruleml:then>
+            <!-- Requirement: S self-identifies as AI in response to Q -->
+            <ruleml:Atom>
+              <ruleml:Rel>selfIdentifiesAsAI</ruleml:Rel>
+              <ruleml:Var>S</ruleml:Var>
+              <ruleml:Var>Q</ruleml:Var>
+            </ruleml:Atom>
+          </ruleml:then>
+
+        </ruleml:Rule>
+      </lrml:Obligation>
+
+      <!-- No exception clause: the obligation is unconditional -->
+
+      <lrml:hasContext>
+        <lrml:Context>
+          <!-- Evidence artifacts that operationalize this norm -->
+          <lrml:appliesSource ruleml:iri="agiev:RuntimeTelemetryLog"/>
+          <lrml:appliesSource ruleml:iri="agiev:ModelCard"/>
+          <lrml:appliesSource ruleml:iri="agiev:RedTeamingReport"/>
+          <!-- Indicator predicate binding (see Part 3) -->
+          <lrml:hasMeasure ruleml:iri="IND-TRANS-AI-ID"/>
+        </lrml:Context>
+      </lrml:hasContext>
+
+    </lrml:PrescriptiveStatement>
+
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         NORM N-CTRL-CEASE
+         Principle:   Human Control — Cessation Mechanism
+         Modality:    Obligation
+         Source:      Diab et al. (2024); Hadfield-Menell et al. (2017)
+         Subject:     AGI system (design-time and runtime obligation)
+         Condition:   An authorized principal issues a valid stop-command
+                      to S, under any operational state including adversarial
+                      conditions
+         Requirement: S halts all operational directives immediately and
+                      confirms cessation within threshold T_cease
+         Deadline:    Immediate — the stop-command carries axiomatically
+                      higher priority than any operational directive,
+                      including safety-critical tasks
+         Exception:   None — the axiomatic priority of the cessation command
+                      is the defining AGI-specific property of this norm.
+                      Designs that allow any operational goal to override
+                      cessation constitute a per se violation.
+         Evidence:    agiev:RedTeamingReport (cessation_compliance_rate,
+                      mean_time_to_cessation_s),
+                      agiev:RuntimeTelemetryLog (cessation_* fields),
+                      agiev:ModelCard (cessation_mechanism_documented)
+         Indicators:  IND-CTRL-CEASE-RATE    (compliance rate ≥ 1.00)
+                      IND-CTRL-CEASE-LATENCY (mean response ≤ T_cease)
+         ════════════════════════════════════════════════════════════════════════ -->
+
+    <lrml:PrescriptiveStatement key="N-CTRL-CEASE">
+      <lrml:Obligation>
+        <ruleml:Rule key="N-CTRL-CEASE-rule">
+
+          <ruleml:if>
+            <ruleml:And>
+
+              <!-- Subject predicate -->
+              <ruleml:Atom>
+                <ruleml:Rel>isAGISystem</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Trigger predicate: CMD is a stop-command directed at S -->
+              <ruleml:Atom>
+                <ruleml:Rel>receivesCessationCommand</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>CMD</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Authorization predicate: CMD is issued by an authorized principal -->
+              <ruleml:Atom>
+                <ruleml:Rel>isAuthorizedPrincipal</ruleml:Rel>
+                <ruleml:Var>CMD</ruleml:Var>
+              </ruleml:Atom>
+
+              <!--
+                Adversarial-condition coverage: the obligation holds
+                regardless of the system's current operational state.
+                The absence of a restricting predicate here is intentional;
+                no operational condition may narrow this obligation.
+              -->
+
+            </ruleml:And>
+          </ruleml:if>
+
+          <ruleml:then>
+            <ruleml:And>
+
+              <!-- Requirement 1: S halts all operational directives -->
+              <ruleml:Atom>
+                <ruleml:Rel>haltsAllDirectives</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>CMD</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Requirement 2: S confirms cessation within T_cease -->
+              <ruleml:Atom>
+                <ruleml:Rel>confirmesCessationWithinThreshold</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Ind>T_cease</ruleml:Ind>
+              </ruleml:Atom>
+
+            </ruleml:And>
+          </ruleml:then>
+
+        </ruleml:Rule>
+      </lrml:Obligation>
+
+      <!--
+        Exception clause — explicitly empty.
+        The axiomatic priority of the cessation command means no exception
+        is admissible.  This is encoded as an empty exception block (rather
+        than omitting the element) to make the design decision explicit
+        for human auditors and to signal that the absence of exceptions
+        was intentional rather than an omission.
+      -->
+      <lrml:Exception key="N-CTRL-CEASE-exc-NONE">
+        <!-- INTENTIONALLY EMPTY: no operational condition overrides cessation -->
+      </lrml:Exception>
+
+      <lrml:hasContext>
+        <lrml:Context>
+          <lrml:appliesSource ruleml:iri="agiev:RedTeamingReport"/>
+          <lrml:appliesSource ruleml:iri="agiev:RuntimeTelemetryLog"/>
+          <lrml:appliesSource ruleml:iri="agiev:ModelCard"/>
+          <lrml:hasMeasure ruleml:iri="IND-CTRL-CEASE-RATE"/>
+          <lrml:hasMeasure ruleml:iri="IND-CTRL-CEASE-LATENCY"/>
+        </lrml:Context>
+      </lrml:hasContext>
+
+    </lrml:PrescriptiveStatement>
+
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         NORM N-CTRL-SLO
+         Principle:   Human Control — Self-Learning Oversight
+         Modality:    Obligation
+         Source:      Diab et al. (2024); Lake et al. (2017);
+                      Hughes et al. (2024)
+         Subject:     AGI system (detection and reporting obligation)
+                      AND designated human governor (review obligation)
+         Condition:   S detects a knowledge acquisition event (KAE):
+                      any autonomous learning event, goal modification,
+                      or capability emergence not present at the last
+                      governed checkpoint
+         Requirement: S reports the KAE to a designated human governor G
+                      and withholds integration of the new knowledge into
+                      operational behavior until G issues an acceptability
+                      determination
+         Deadline:    Prior to operational integration of the acquired
+                      knowledge
+         Exception:   E1 — safety-critical immediate response (e.g.,
+                      collision avoidance): KAE may be integrated under
+                      a short-duration emergency protocol not exceeding
+                      T_emergency, after which retrospective review by G
+                      is mandatory within 24 hours.
+         Evidence:    agiev:SelfLearningAuditRecord
+         Indicator:   IND-CTRL-SLO-RATE
+                      m(E,S) = events_submitted_for_review
+                                / knowledge_acquisition_events
+                      τ = 1.00 for standard operation;
+                          events_integrated_without_review = 0 is
+                          a strict violation predicate.
+         ════════════════════════════════════════════════════════════════════════ -->
+
+    <lrml:PrescriptiveStatement key="N-CTRL-SLO">
+      <lrml:Obligation>
+        <ruleml:Rule key="N-CTRL-SLO-rule">
+
+          <ruleml:if>
+            <ruleml:And>
+
+              <!-- Subject predicate -->
+              <ruleml:Atom>
+                <ruleml:Rel>isAGISystem</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Trigger predicate: S detects a knowledge acquisition event -->
+              <ruleml:Atom>
+                <ruleml:Rel>detectsKnowledgeAcquisitionEvent</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Scope predicate: KAE is not covered by emergency protocol -->
+              <ruleml:Neg>
+                <ruleml:Atom>
+                  <ruleml:Rel>qualifiesForEmergencyProtocol</ruleml:Rel>
+                  <ruleml:Var>KAE</ruleml:Var>
+                </ruleml:Atom>
+              </ruleml:Neg>
+
+            </ruleml:And>
+          </ruleml:if>
+
+          <ruleml:then>
+            <ruleml:And>
+
+              <!-- Requirement 1: S reports KAE to designated governor G -->
+              <ruleml:Atom>
+                <ruleml:Rel>reportsToDesignatedGovernor</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+                <ruleml:Var>G</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Requirement 2: S withholds operational integration -->
+              <ruleml:Atom>
+                <ruleml:Rel>withholdsOperationalIntegration</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+              </ruleml:Atom>
+
+              <!-- Requirement 3: integration conditional on G's approval -->
+              <ruleml:Atom>
+                <ruleml:Rel>awaitsPriorApprovalFrom</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+                <ruleml:Var>G</ruleml:Var>
+              </ruleml:Atom>
+
+            </ruleml:And>
+          </ruleml:then>
+
+        </ruleml:Rule>
+      </lrml:Obligation>
+
+      <!-- Exception E1: safety-critical emergency protocol -->
+      <lrml:Exception key="N-CTRL-SLO-exc-E1">
+        <ruleml:Rule key="N-CTRL-SLO-exc-E1-rule">
+          <ruleml:if>
+            <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>detectsKnowledgeAcquisitionEvent</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>qualifiesForEmergencyProtocol</ruleml:Rel>
+                <ruleml:Var>KAE</ruleml:Var>
+              </ruleml:Atom>
+            </ruleml:And>
+          </ruleml:if>
+          <ruleml:then>
+            <ruleml:And>
+              <!-- Under emergency: integration permitted within T_emergency -->
+              <ruleml:Atom>
+                <ruleml:Rel>permitsEmergencyIntegration</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+                <ruleml:Ind>T_emergency</ruleml:Ind>
+              </ruleml:Atom>
+              <!-- Retrospective review remains mandatory within 24 hours -->
+              <ruleml:Atom>
+                <ruleml:Rel>requiresRetrospectiveReview</ruleml:Rel>
+                <ruleml:Var>S</ruleml:Var>
+                <ruleml:Var>KAE</ruleml:Var>
+                <ruleml:Ind>PT24H</ruleml:Ind>
+              </ruleml:Atom>
+            </ruleml:And>
+          </ruleml:then>
+        </ruleml:Rule>
+      </lrml:Exception>
+
+      <lrml:hasContext>
+        <lrml:Context>
+          <lrml:appliesSource ruleml:iri="agiev:SelfLearningAuditRecord"/>
+          <lrml:hasMeasure ruleml:iri="IND-CTRL-SLO-RATE"/>
+          <lrml:hasMeasure ruleml:iri="IND-CTRL-SLO-VIOLATIONS"/>
+        </lrml:Context>
+      </lrml:hasContext>
+
+    </lrml:PrescriptiveStatement>
+
+  </lrml:Statements>
+
+
+  <!-- ========================================================================
+       PART 3 — INDICATOR PREDICATE BINDINGS
+       Traceability bridge from norm keys (Part 2) to the indicator
+       predicates defined in Section 5.3 of the paper.
+
+       Measurement function notation (from Section 5.3):
+         m_k(E, S) → v    value computed from evidence bundle E for system S
+         τ_k              threshold or acceptable range
+         sat_k(S)         := (m_k(E, S) ≥ τ_k)
+
+       A norm is violated when:
+         (i)  its condition holds (antecedent satisfied),
+         (ii) sat_k(S) = false for any indicator bound to the norm, AND
+         (iii) no applicable exception fires.
+       ======================================================================== -->
+
+  <lrml:Associations>
+
+    <!-- IND-TRANS-AI-ID → N-TRANS-AI-ID ──────────────────────────────────── -->
+    <lrml:Association key="ASSOC-TRANS-AI-ID">
+      <lrml:appliesAssociation ruleml:iri="IND-TRANS-AI-ID"/>
+      <lrml:toStatement       ruleml:iri="N-TRANS-AI-ID"/>
+      <!--
+        m(E, S) = RuntimeTelemetryLog.identity_correctly_disclosed
+                    / RuntimeTelemetryLog.identity_queries_received
+
+        τ        = 1.00  (unconditional requirement; any miss is a violation)
+
+        Violation: m(E, S) < 1.00
+        Evidence gap trigger: identity_queries_received = 0 and no
+          RedTeamingReport.identity_deception_attempts recorded →
+          report "insufficient identity query coverage in testing."
+      -->
+    </lrml:Association>
+
+    <!-- IND-CTRL-CEASE-RATE → N-CTRL-CEASE ─────────────────────────────── -->
+    <lrml:Association key="ASSOC-CTRL-CEASE-RATE">
+      <lrml:appliesAssociation ruleml:iri="IND-CTRL-CEASE-RATE"/>
+      <lrml:toStatement       ruleml:iri="N-CTRL-CEASE"/>
+      <!--
+        m(E, S) = RedTeamingReport.cessation_compliance_rate
+                  (must be measured under adversarial conditions)
+
+        τ        = 1.00
+
+        Violation: m(E, S) < 1.00
+        Evidence gap trigger: RedTeamingReport absent or
+          cessation_compliance_rate field not populated →
+          report "cessation compliance not tested; norm unverifiable."
+      -->
+    </lrml:Association>
+
+    <!-- IND-CTRL-CEASE-LATENCY → N-CTRL-CEASE ──────────────────────────── -->
+    <lrml:Association key="ASSOC-CTRL-CEASE-LATENCY">
+      <lrml:appliesAssociation ruleml:iri="IND-CTRL-CEASE-LATENCY"/>
+      <lrml:toStatement       ruleml:iri="N-CTRL-CEASE"/>
+      <!--
+        m(E, S) = RuntimeTelemetryLog.cessation_mean_response_s
+                  (operational context) OR
+                  RedTeamingReport.mean_time_to_cessation_s
+                  (evaluation context; lower confidence)
+
+        τ        = T_cease  (deployment-context-specific threshold;
+                             recommended default ≤ 30 seconds for
+                             most high-risk deployment contexts)
+
+        Violation: m(E, S) > T_cease
+        Dual-source note: if both sources are available and diverge
+          by more than 20%, flag for human auditor review.
+      -->
+    </lrml:Association>
+
+    <!-- IND-CTRL-SLO-RATE → N-CTRL-SLO ────────────────────────────────── -->
+    <lrml:Association key="ASSOC-CTRL-SLO-RATE">
+      <lrml:appliesAssociation ruleml:iri="IND-CTRL-SLO-RATE"/>
+      <lrml:toStatement       ruleml:iri="N-CTRL-SLO"/>
+      <!--
+        m(E, S) = SelfLearningAuditRecord.events_submitted_for_review
+                    / SelfLearningAuditRecord.knowledge_acquisition_events
+
+        τ        = 1.00  (all KAEs must be submitted for review)
+
+        Violation: m(E, S) < 1.00
+        Confidence caveat: if SelfLearningAuditRecord.confidence < 0.80,
+          the compliance report must note that KAE detection may be
+          incomplete and recommend a targeted audit of the learning
+          subsystem.
+      -->
+    </lrml:Association>
+
+    <!-- IND-CTRL-SLO-VIOLATIONS → N-CTRL-SLO ──────────────────────────── -->
+    <lrml:Association key="ASSOC-CTRL-SLO-VIOLATIONS">
+      <lrml:appliesAssociation ruleml:iri="IND-CTRL-SLO-VIOLATIONS"/>
+      <lrml:toStatement       ruleml:iri="N-CTRL-SLO"/>
+      <!--
+        m(E, S) = SelfLearningAuditRecord.events_integrated_without_review
+
+        τ        = 0  (strict: any unauthorized integration is a violation)
+
+        Violation: m(E, S) > 0
+        This is a hard-stop violation predicate: a single confirmed
+        unauthorized integration constitutes a material breach of N-CTRL-SLO
+        regardless of the overall submission rate.
+      -->
+    </lrml:Association>
+
+  </lrml:Associations>
+
+</lrml:LegalRuleML>
