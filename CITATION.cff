@@ -1,0 +1,150 @@
+cff-version: 1.2.0
+
+# ── WHAT THIS FILE DOES ────────────────────────────────────────────────────
+# This CITATION.cff covers two citable objects housed in this repository:
+#
+#   1. The companion paper (primary citation — use this by default)
+#   2. The AGI Evidence Vocabulary (agiev) and LegalRuleML encoding
+#      (cite separately when reusing only the vocabulary/supplementary file)
+#
+# The "preferred-citation" block below points to the paper.
+# The top-level fields describe the software/vocabulary artifact itself.
+# ──────────────────────────────────────────────────────────────────────────
+
+# ── TOP-LEVEL: vocabulary / software artifact ─────────────────────────────
+message: >-
+  If you use the AGI Evidence Vocabulary (agiev), the LegalRuleML
+  encoding, or the compliance engine from this repository, please cite
+  the companion paper using the preferred-citation block below.
+
+title: >-
+  AGI Governance Compliance Model: LegalRuleML Encoding, AGI Evidence
+  Vocabulary (agiev), and Reference Implementation
+
+version: "1.0.0"
+date-released: "2026-03-26"
+
+repository-code: "https://github.com/coronafraga/agi-governance"
+url: "https://w3id.org/agi-governance"
+license: CC-BY-4.0
+
+keywords:
+  - AGI governance
+  - artificial general intelligence
+  - LegalRuleML
+  - deontic logic
+  - normative reasoning
+  - compliance checking
+  - audit evidence
+  - AI governance
+  - ISO/IEC 42001
+  - machine-checkable norms
+
+authors:
+  - family-names: "Corona Fraga"
+    given-names: "Pablo"
+    orcid: "https://orcid.org/0000-0001-5012-9468"
+    affiliation: >-
+      INFOTEC — Research Center for Information and
+      Communication Technologies, Mexico City, Mexico
+    email: "pablo.coronaf@infotec.mx"
+
+  - family-names: "Diab"
+    given-names: "Amin M.E-A."
+    orcid: "https://orcid.org/0009-0008-4069-885X"
+    affiliation: >-
+      Johns Hopkins Whiting School of Engineering,
+      Johns Hopkins University, Baltimore, MD, USA
+    email: "adiab3@jhu.edu"
+
+  - family-names: "Hwang"
+    given-names: "Sun Ho"
+    orcid: "https://orcid.org/0009-0008-7161-2641"
+    affiliation: >-
+      Johns Hopkins Whiting School of Engineering Alumnus,
+      Johns Hopkins University, Baltimore, MD, USA
+    email: "shwang42@alumni.jh.edu"
+
+  - family-names: "Diaz"
+    given-names: "Vanessa"
+    orcid: "https://orcid.org/0000-0002-7186-8785"
+    affiliation: >-
+      Supreme Court of Justice of the Nation, Mexico
+
+# ── PREFERRED CITATION: companion paper ──────────────────────────────────
+# Update doi, journal, volume, issue, start, and end when the paper is
+# accepted. Until then, use type: unpublished and the preprint url.
+preferred-citation:
+  type: unpublished
+  # ── When accepted, change type to "article" and fill in the fields below:
+  # type: article
+  # doi: "10.XXXXX/XXXXX"            # assign at acceptance
+  # journal: "Artificial Intelligence and Law"   # confirm at acceptance
+  # volume: X
+  # issue: X
+  # start: X
+  # end: X
+
+  title: >-
+    Machine-checkable compliance for AGI Governance: Formalizing
+    principles as auditable norms and evidence-linked indicators
+
+  authors:
+    - family-names: "Corona Fraga"
+      given-names: "Pablo"
+      orcid: "https://orcid.org/0000-0001-5012-9468"
+      affiliation: >-
+        INFOTEC — Research Center for Information and
+        Communication Technologies, Mexico City, Mexico
+
+    - family-names: "Diab"
+      given-names: "Amin M.E-A."
+      orcid: "https://orcid.org/0009-0008-4069-885X"
+      affiliation: >-
+        Johns Hopkins Whiting School of Engineering,
+        Johns Hopkins University, Baltimore, MD, USA
+
+    - family-names: "Hwang"
+      given-names: "Sun Ho"
+      orcid: "https://orcid.org/0009-0008-7161-2641"
+      affiliation: >-
+        Johns Hopkins Whiting School of Engineering Alumnus,
+        Johns Hopkins University, Baltimore, MD, USA
+
+    - family-names: "Diaz"
+      given-names: "Vanessa"
+      orcid: "https://orcid.org/0000-0002-7186-8785"
+      affiliation: >-
+        Supreme Court of Justice of the Nation, Mexico
+
+  year: 2026
+  month: 3
+
+  abstract: >-
+    This article proposes a machine-checkable governance compliance model
+    for AGI that operationalizes widely recognized principles
+    (transparency, accountability, beneficence/non-maleficence, fairness,
+    human control, robustness and security, and industry-community
+    collaboration) as formal norms and measurable indicators grounded in
+    concrete evidence artifacts. Building on a systematic evidence
+    mapping, normative triangulation with contemporary risk governance
+    frameworks — including ISO/IEC 42001:2023 and the EU AI Act — and an
+    indicator synthesis from comparative evaluations of foundation models,
+    the paper defines a computable knowledge model linking principles,
+    controls, indicators, and evidence; a formal specification of a
+    compliance-checking procedure with reference architecture; and a
+    pre-registered prospective evaluation framework for high-impact
+    deployments.
+
+  keywords:
+    - artificial intelligence
+    - artificial general intelligence
+    - AI governance
+    - legal compliance checking
+    - normative reasoning
+    - audit evidence
+    - risk management
+    - ISO/IEC 42001
+    - AI management systems
+    - deontic logic
+    - LegalRuleML
