@@ -3,7 +3,7 @@
 **Vocabulary namespace:** `https://w3id.org/agi-governance/evidence/ns/v1.0/`  
 **Norm base URI:** `https://w3id.org/agi-governance/norms/`  
 **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)  
-**Version:** 1.0.0 · Released 2026-03-26
+**Version:** 1.0.1 · Released 2026-04-06
 
 This repository is the supplementary resource for:
 
@@ -19,7 +19,7 @@ This repository is the supplementary resource for:
 |------|-------------|
 | `agi_governance_legalruleml.xml` | AGI Evidence Vocabulary (agiev) and LegalRuleML encoding of three representative AGI-specific norms (N-TRANS-AI-ID, N-CTRL-CEASE, N-CTRL-SLO) |
 | `checker/compliance_engine.py` | Reference compliance checker: indicator measurement functions, norm verdict aggregation, report generation |
-| `evidence/bundles.py` | Evidence bundle factory for all three case-study domains (legal assistant, incident-response agent, critical infrastructure) |
+| `evidence/evidence_bundles.py` | Evidence bundle factory for all three case-study domains (legal assistant, incident-response agent, critical infrastructure) |
 | `run_evaluation.py` | Evaluation harness: precision/recall on injected violations and gaps, explanation completeness, auditor-effort comparison |
 | `results/aggregate_metrics.json` | Evaluation output from the reference run |
 | `CITATION.cff` | Citation metadata for the paper and vocabulary |
