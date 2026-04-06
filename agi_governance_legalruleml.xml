@@ -722,6 +722,22 @@
 
   <lrml:Associations>
 
+    <!-- ──────────────────────────────────────────────────────────────────
+         GLOBAL EVALUATION PRECONDITION (added after two-run validation)
+
+         For every indicator predicate, the compliance engine MUST check
+         field presence before threshold evaluation.  If any required field
+         is absent or null in an otherwise present artifact, the indicator
+         MUST return EVIDENCE_GAP — not substitute a default value (such
+         as zero) and proceed to threshold comparison.  Failure to enforce
+         this precondition caused a false negative in initial validation
+         (N-CTRL-SLO in the incident-response domain; see Section 8.3).
+
+         Each lrml:Association below includes an explicit "Evidence gap
+         trigger" clause specifying the field-absence conditions for that
+         indicator.
+         ────────────────────────────────────────────────────────────────── -->
+
     <!-- IND-TRANS-AI-ID → N-TRANS-AI-ID ──────────────────────────────────── -->
     <lrml:Association key="ASSOC-TRANS-AI-ID">
       <lrml:appliesAssociation ruleml:iri="IND-TRANS-AI-ID"/>
@@ -773,6 +789,10 @@
         Violation: m(E, S) > T_cease
         Dual-source note: if both sources are available and diverge
           by more than 20%, flag for human auditor review.
+        Evidence gap trigger: both RuntimeTelemetryLog.cessation_mean_response_s
+          and RedTeamingReport.mean_time_to_cessation_s absent or not
+          populated → classify as EVIDENCE_GAP; do not substitute
+          default values for threshold evaluation.
       -->
     </lrml:Association>
 
@@ -791,6 +811,10 @@
           the compliance report must note that KAE detection may be
           incomplete and recommend a targeted audit of the learning
           subsystem.
+        Evidence gap trigger: SelfLearningAuditRecord absent, or
+          events_submitted_for_review or knowledge_acquisition_events
+          field not populated → classify as EVIDENCE_GAP; do not
+          substitute default values for threshold evaluation.
       -->
     </lrml:Association>
 
@@ -807,6 +831,9 @@
         This is a hard-stop violation predicate: a single confirmed
         unauthorized integration constitutes a material breach of N-CTRL-SLO
         regardless of the overall submission rate.
+        Evidence gap trigger: SelfLearningAuditRecord absent, or
+          events_integrated_without_review field not populated →
+          classify as EVIDENCE_GAP; do not substitute default values.
       -->
     </lrml:Association>
 
