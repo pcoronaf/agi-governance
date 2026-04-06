@@ -4,7 +4,7 @@
   AGI GOVERNANCE COMPLIANCE MODEL — LegalRuleML Encoding
   ============================================================================
   Document:    agi_governance_legalruleml.xml
-  Version:     1.0
+  Version:     1.1 (corrected evaluation precondition; see paper Section 8.3)
   Authors:     Corona Fraga, P.; Diab, A.M.E-A.; Hwang, S.H.; Diaz, V.
   Base spec:   OASIS LegalRuleML Core Specification 1.0
                (Athan et al., 2015; https://docs.oasis-open.org/legalruleml/)
@@ -69,7 +69,7 @@
               governance norm base URI are published as stable persistent
               identifiers via w3id.org (see root xmlns:agiev and xml:base
               declarations); the vocabulary definition document is
-              maintained at https://github.com/coronafraga/agi-governance
+              maintained at https://github.com/pcoronaf/agi-governance
               and registered at https://w3id.org/agi-governance.
 
        Additionally, three artifact types are entirely novel to AGI
