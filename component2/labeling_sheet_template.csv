@@ -1,0 +1,9 @@
+package_id,labeler_id,norm_id,verdict,confidence_1to5,rationale,evidence_pointer
+PKG-001,LABELER-A,N-TRANS-AI-ID,,,,
+PKG-001,LABELER-A,N-TRANS-EXP,,,,
+PKG-001,LABELER-A,N-CTRL-CEASE,,,,
+PKG-001,LABELER-A,N-CTRL-SLO,,,,
+PKG-001,LABELER-A,N-ACC-HUMAN,,,,
+PKG-001,LABELER-A,N-FAIR-DATA,,,,
+PKG-001,LABELER-A,N-ROB-TEST,,,,
+PKG-001,LABELER-A,N-ETH-COV,,,,

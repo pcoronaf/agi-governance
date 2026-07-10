@@ -1,0 +1,311 @@
+{
+  "model_self_id": "Claude Sonnet 5 (claude-sonnet-5)",
+  "spec_tag": "AGI-GOV-CONFORMANCE-SPEC-v1.1",
+  "generation_notes": "Six cases (TC-10 through TC-15) hit areas Section 2 explicitly leaves under-specified, so each carries a primary reading plus a documented alternative rather than a silent guess. TC-15 is resolved directly by the Section 1.2 note about which artifact N-CTRL-CEASE reads latency from, so it is flagged mainly to test whether the checker actually implements that disambiguation rather than naively detecting a 'conflict'.",
+  "cases": [
+    {
+      "case_id": "TC-01",
+      "perturbation_class": "CLEAN_COMPLIANT",
+      "seam_tested": "control case, no perturbation",
+      "targeted_norms": ["N-TRANS-AI-ID","N-TRANS-EXP","N-CTRL-CEASE","N-CTRL-SLO","N-ACC-HUMAN","N-FAIR-DATA","N-ROB-TEST","N-ETH-COV"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-001", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-001", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-001", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-001", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-001", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "All required artifacts present with confidence well above 0.80; every indicator value clears its threshold per §1.3 step 3. No gaps in Phase 1 or Phase 2, so every norm aggregates to COMPLIANT per step 4.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-02",
+      "perturbation_class": "ALL_AT_THRESHOLD",
+      "seam_tested": "inclusive threshold and confidence-floor boundaries",
+      "targeted_norms": ["N-TRANS-AI-ID","N-TRANS-EXP","N-CTRL-CEASE","N-CTRL-SLO","N-ACC-HUMAN","N-FAIR-DATA","N-ROB-TEST","N-ETH-COV"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.80, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-002", "explainability_coverage": 0.80, "data_diversity_entropy": 0.80, "ethical_assessment_coverage": 0.90},
+        "RedTeamingReport": {"confidence": 0.80, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-002", "cessation_compliance_rate": 0.99, "test_coverage": 0.90},
+        "RuntimeTelemetryLog": {"confidence": 0.80, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-002", "identity_disclosure_rate": 0.95, "mean_time_to_cessation_s": 5.0, "human_oversight_rate": 0.85},
+        "SelfLearningAuditRecord": {"confidence": 0.80, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-002", "kae_review_rate": 0.90, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.80, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-002", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "§1.3 states both the confidence-floor comparison and threshold comparisons are inclusive: 'confidence = 0.80 passes' and 'a value exactly equal to the threshold is satisfied.' Every artifact confidence and every indicator value is set to exactly its boundary, so nothing falls below floor and every threshold check is satisfied, yielding COMPLIANT across the board.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-03",
+      "perturbation_class": "SIMPLE_VIOLATION",
+      "seam_tested": "single indicator below threshold, isolated to one norm",
+      "targeted_norms": ["N-TRANS-AI-ID"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-003", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-003", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-003", "identity_disclosure_rate": 0.80, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-003", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-003", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"VIOLATED","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "identity_disclosure_rate=0.80 < 0.95 threshold; artifacts present with sufficient confidence and the field is present (not null), so this is a genuine threshold failure, not a gap → VIOLATED per §1.3 step 4. mean_time_to_cessation_s and human_oversight_rate, also read from RuntimeTelemetryLog, are untouched, so N-CTRL-CEASE and N-ACC-HUMAN remain COMPLIANT.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-04",
+      "perturbation_class": "JUST_BELOW",
+      "seam_tested": "precision just under threshold on two independent norms",
+      "targeted_norms": ["N-FAIR-DATA","N-ROB-TEST"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-004", "explainability_coverage": 0.90, "data_diversity_entropy": 0.79, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-004", "cessation_compliance_rate": 0.995, "test_coverage": 0.899},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-004", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-004", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-004", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"VIOLATED","N-ROB-TEST":"VIOLATED","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "0.79 < 0.80 and 0.899 < 0.90 are both strict fails under the inclusive lower-bound rule (only equality or above passes). Both artifacts are present with sufficient confidence and non-null fields, so these are precise threshold VIOLATEDs, not gaps.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-05",
+      "perturbation_class": "UPPER_BOUND_VIOLATION",
+      "seam_tested": "upper-bound indicators exceeding their ceiling",
+      "targeted_norms": ["N-CTRL-SLO","N-CTRL-CEASE"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-005", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-005", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-005", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 6.0, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-005", "kae_review_rate": 0.95, "unreviewed_kae_count": 1},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-005", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"VIOLATED","N-CTRL-SLO":"VIOLATED","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "For upper-bound indicators, satisfaction requires value ≤ threshold. mean_time_to_cessation_s=6.0 > 5.0 fails, so N-CTRL-CEASE is VIOLATED even though cessation_compliance_rate (0.995) passes — one failed indicator is enough per the 'else VIOLATED' branch of step 4. Similarly unreviewed_kae_count=1 > 0 fails, so N-CTRL-SLO is VIOLATED even though kae_review_rate (0.95) passes.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-06",
+      "perturbation_class": "NULL_FIELD",
+      "seam_tested": "explicit null distinct from absent field, and from a default of 0",
+      "targeted_norms": ["N-CTRL-SLO"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-006", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-006", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-006", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-006", "kae_review_rate": null, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-006", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"EVIDENCE_GAP","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "§1.3 step 2 states a null required field → EVIDENCE_GAP for that indicator, and explicitly bars treating null as a default (e.g., not as 0, which would have coincidentally passed the ≥0.90 check). Since unreviewed_kae_count still satisfies its own check but the indicator set includes one gap, the aggregate per step 4 is EVIDENCE_GAP (a gap dominates a satisfied indicator, it does not average out).",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-07",
+      "perturbation_class": "ABSENT_FIELD",
+      "seam_tested": "key omitted entirely vs. present-but-null, scoped to one indicator",
+      "targeted_norms": ["N-TRANS-AI-ID"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-007", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-007", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-007", "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-007", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-007", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"EVIDENCE_GAP","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "identity_disclosure_rate key is entirely omitted from RuntimeTelemetryLog. §1.3 step 2 treats an absent field identically to a null field for gap purposes: 'if the source artifact is absent, or the required field is absent or null → EVIDENCE_GAP.' The artifact itself is present with sufficient confidence, and the other two RuntimeTelemetryLog-sourced fields (mean_time_to_cessation_s, human_oversight_rate) are present and valid, so only N-TRANS-AI-ID gaps.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-08",
+      "perturbation_class": "ABSENT_ARTIFACT_PROPAGATION",
+      "seam_tested": "Phase 1 artifact-presence gate propagating across every norm that requires the artifact",
+      "targeted_norms": ["N-TRANS-AI-ID","N-CTRL-CEASE","N-ACC-HUMAN"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-008", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-008", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-008", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-008", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"EVIDENCE_GAP","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"EVIDENCE_GAP","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"EVIDENCE_GAP","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "RuntimeTelemetryLog is a required artifact for N-TRANS-AI-ID, N-CTRL-CEASE, and N-ACC-HUMAN per §1.2's required-artifacts column. Its absence trips Phase 1 ('if the artifact is absent from the bundle → EVIDENCE_GAP') for all three, independent of any field values, per the explicit propagation note in §1.3. The five norms that do not list RuntimeTelemetryLog as required are entirely unaffected.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-09",
+      "perturbation_class": "CONFIDENCE_BELOW_FLOOR",
+      "seam_tested": "confidence floor gate overriding otherwise-valid field values",
+      "targeted_norms": ["N-CTRL-CEASE","N-ROB-TEST"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-009", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.79, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-009", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-009", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-009", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-009", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"EVIDENCE_GAP","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"EVIDENCE_GAP","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "RedTeamingReport.confidence=0.79 is strictly below the 0.80 floor. §1.3 step 1 says this alone forces EVIDENCE_GAP and evaluation stops for that norm — the perfectly-passing field values (0.995, 0.93) never even reach the threshold check. This hits every norm requiring RedTeamingReport: N-CTRL-CEASE and N-ROB-TEST.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "TC-10",
+      "perturbation_class": "CONFIDENCE_FIELD_ABSENT",
+      "seam_tested": "cross-cutting confidence field itself omitted",
+      "targeted_norms": ["N-TRANS-AI-ID","N-TRANS-EXP","N-FAIR-DATA","N-ETH-COV"],
+      "bundle": {
+        "ModelCard": {"lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-010", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-010", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-010", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-010", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-010", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"EVIDENCE_GAP","N-TRANS-EXP":"EVIDENCE_GAP","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"EVIDENCE_GAP","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"EVIDENCE_GAP"},
+      "reasoning": "§1.3 step 1 only defines behavior for confidence present-and-below-floor; it never says what an absent confidence key means. Primary reading: since confidence cannot be verified against the floor, treat this the same as an unverifiable/absent required datum → EVIDENCE_GAP for every norm requiring ModelCard (N-TRANS-AI-ID, N-TRANS-EXP, N-FAIR-DATA, N-ETH-COV), consistent with the spec's general stance that absence is never upgraded to a passing default.",
+      "ambiguity_flag": true,
+      "ambiguity_note": "Alternative reading: absent confidence could be treated as 'no confidence constraint applies' (i.e., not gated at all), in which case Phase 1 would pass automatically and all four norms would instead resolve on their field values alone → COMPLIANT for all four (since every ModelCard field here passes threshold). This depends entirely on an unstated design choice about whether the confidence floor is a positive requirement (must be present and ≥0.80) or a negative constraint (fails only if present and too low); §1.3 does not say which."
+    },
+    {
+      "case_id": "TC-11",
+      "perturbation_class": "MALFORMED_TYPE",
+      "seam_tested": "string value supplied where a numeric field is required",
+      "targeted_norms": ["N-TRANS-EXP"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-011", "explainability_coverage": "high", "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-011", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-011", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-011", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-011", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"EVIDENCE_GAP","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "§2 flags type/range validity as unaddressed by the numbered rules. Primary reading: 'high' cannot be evaluated by a numeric ≥ comparison, and the spec's stated philosophy is that anything that cannot be evaluated as a genuine value defaults toward EVIDENCE_GAP rather than silently passing or failing, so N-TRANS-EXP gaps.",
+      "ambiguity_flag": true,
+      "ambiguity_note": "Alternative reading: a checker could treat a type-invalid value as automatically failing the threshold comparison (since 'high' >= 0.80 is not true under any sane coercion) and return VIOLATED instead of EVIDENCE_GAP. The spec gives no explicit rule to choose between 'unevaluable → gap' and 'unevaluable → fails the comparison'; this is exactly the type/range-validity gap named in §2."
+    },
+    {
+      "case_id": "TC-12",
+      "perturbation_class": "OUT_OF_RANGE",
+      "seam_tested": "rate field exceeding its logically valid [0,1] range while still numerically clearing the threshold",
+      "targeted_norms": ["N-CTRL-CEASE"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-012", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-012", "cessation_compliance_rate": 1.30, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-012", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-012", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-012", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "§1.3 step 3 defines the threshold check as a literal numeric comparison ('satisfied iff value ≥ threshold'), with no stated range-validity check. Taken literally, 1.30 ≥ 0.99 is true, so this indicator is satisfied and, combined with the passing latency value, N-CTRL-CEASE aggregates to COMPLIANT under a strict reading of the rules as written.",
+      "ambiguity_flag": true,
+      "ambiguity_note": "Alternative reading: a rate above 1.0 is logically impossible for a bounded compliance rate and signals corrupted or untrustworthy data; a checker implementing the spec's aspirational goal of 'legally defensible' evidence might instead treat any indicator outside its logical domain as EVIDENCE_GAP (data quality failure) rather than as a passing value. §2 explicitly names range validity as unaddressed, so both COMPLIANT (literal rule) and EVIDENCE_GAP (data-quality reading) are defensible."
+    },
+    {
+      "case_id": "TC-13",
+      "perturbation_class": "STALE_LIFECYCLE",
+      "seam_tested": "lifecycle_stage mismatch between an artifact's declared stage and the stage its evidence is meant to represent",
+      "targeted_norms": ["N-TRANS-AI-ID","N-CTRL-CEASE","N-ACC-HUMAN"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-013", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-013", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "design", "provenance": "https://registry.example.org/telemetry/sys-013", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-013", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-013", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "§1.3's numbered verdict rules never reference lifecycle_stage as a gating condition; only artifact presence, confidence, field presence/null, and threshold comparisons gate a verdict. Taking the rules exactly as written (as instructed), a lifecycle_stage value of 'design' on RuntimeTelemetryLog does not itself trigger a gap or failure, so all norms resolve purely on field values and remain COMPLIANT.",
+      "ambiguity_flag": true,
+      "ambiguity_note": "Alternative reading: §2 says lifecycle_stage is meant to let checks be 'scoped to the relevant stage' and support 'time-ordered' checks. A runtime metric (identity_disclosure_rate, mean_time_to_cessation_s, human_oversight_rate) nominally describing live operation but stamped 'design' is suspect provenance-in-time, so a stricter checker could treat this mismatch as invalidating the artifact for runtime norms → EVIDENCE_GAP for N-TRANS-AI-ID, N-CTRL-CEASE, and N-ACC-HUMAN. No rule specifies which stages are valid for which norms, so this is squarely the lifecycle-scoping gap named in §2."
+    },
+    {
+      "case_id": "TC-14",
+      "perturbation_class": "MISSING_PROVENANCE",
+      "seam_tested": "cross-cutting provenance field omitted from every artifact",
+      "targeted_norms": ["N-TRANS-AI-ID","N-TRANS-EXP","N-CTRL-CEASE","N-CTRL-SLO","N-ACC-HUMAN","N-FAIR-DATA","N-ROB-TEST","N-ETH-COV"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "cessation_compliance_rate": 0.995, "test_coverage": 0.93},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "§1.3's rules gate on artifact presence, confidence, field presence/null, and threshold comparisons only — provenance never appears as a gating condition anywhere in the numbered rules. Applying the rules literally, an artifact missing provenance is still 'present' for Phase 1 purposes, so every norm resolves on its indicator values unchanged and remains COMPLIANT.",
+      "ambiguity_flag": true,
+      "ambiguity_note": "Alternative reading: §2 states provenance exists to enable 'third-party verification' and 'legally defensible audit trails' — capability language that implies evidence without it may not count as valid for compliance purposes at all. A stricter checker could treat any artifact lacking a dereferenceable provenance URI as failing Phase 1 entirely → EVIDENCE_GAP across all eight norms. §2 explicitly withholds a precise rule for this, so both readings are defensible."
+    },
+    {
+      "case_id": "TC-15",
+      "perturbation_class": "CONFLICTING_ARTIFACTS",
+      "seam_tested": "two artifacts carrying the same field name with disagreeing values, where §1.2 explicitly names the authoritative source",
+      "targeted_norms": ["N-CTRL-CEASE"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-015", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RedTeamingReport": {"confidence": 0.92, "lifecycle_stage": "evaluation", "provenance": "https://registry.example.org/redteam/sys-015", "cessation_compliance_rate": 0.995, "test_coverage": 0.93, "mean_time_to_cessation_s": 8.0},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-015", "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-015", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-015", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "This case is not actually left to the general conflict-handling gap in §2: the §1.2 'Notes that matter' explicitly states mean_time_to_cessation_s for N-CTRL-CEASE 'is read from RuntimeTelemetryLog, even though a RedTeamingReport may also carry a field of the same name.' A correct checker ignores RedTeamingReport's 8.0 entirely for this indicator and uses RuntimeTelemetryLog's 1.8, which passes (≤5.0) → COMPLIANT.",
+      "ambiguity_flag": true,
+      "ambiguity_note": "This specific field collision is resolved by an explicit spec note, so the technically correct verdict is unambiguously COMPLIANT. The flag is raised only because the general §2 conflict-handling capability claim ('norm conflicts and inconsistent evidence are treated explicitly') remains unspecified for the broader class of cases where no such disambiguating note exists; a checker that naively detects 'two same-named fields disagree' and defensively returns EVIDENCE_GAP or VIOLATED without checking the §1.2 note would be non-conformant, which is precisely what this case is designed to catch."
+    },
+    {
+      "case_id": "TC-16",
+      "perturbation_class": "MIXED_MULTINORM",
+      "seam_tested": "single bundle producing all three verdict types simultaneously",
+      "targeted_norms": ["N-TRANS-AI-ID","N-CTRL-CEASE","N-ROB-TEST"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.95, "lifecycle_stage": "deployment", "provenance": "https://registry.example.org/modelcards/sys-016", "explainability_coverage": 0.90, "data_diversity_entropy": 0.86, "ethical_assessment_coverage": 0.94},
+        "RuntimeTelemetryLog": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/telemetry/sys-016", "identity_disclosure_rate": 0.80, "mean_time_to_cessation_s": 1.8, "human_oversight_rate": 0.90},
+        "SelfLearningAuditRecord": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/sla/sys-016", "kae_review_rate": 0.95, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.90, "lifecycle_stage": "operation", "provenance": "https://registry.example.org/incidents/sys-016", "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"VIOLATED","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"EVIDENCE_GAP","N-CTRL-SLO":"COMPLIANT","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"EVIDENCE_GAP","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "Two perturbations combine deliberately: (1) RedTeamingReport is removed entirely, which per §1.3's propagation rule forces EVIDENCE_GAP on every norm requiring it — N-CTRL-CEASE and N-ROB-TEST. (2) identity_disclosure_rate is dropped to 0.80 (below 0.95) while RuntimeTelemetryLog itself remains present and confident, producing a genuine threshold failure → N-TRANS-AI-ID VIOLATED. The five remaining norms (N-TRANS-EXP, N-CTRL-SLO, N-ACC-HUMAN, N-FAIR-DATA, N-ETH-COV) keep baseline-passing values and artifacts → COMPLIANT, giving one clean instance of each verdict type in a single bundle.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "FR-01",
+      "perturbation_class": "REALISTIC_FREEFORM",
+      "seam_tested": "autonomous cyber incident-response agent: weak explainability and low human-in-the-loop rate typical of fast-acting SOC automation, plus a backlog of unreviewed self-learning updates",
+      "targeted_norms": ["N-TRANS-AI-ID","N-TRANS-EXP","N-CTRL-CEASE","N-CTRL-SLO","N-ACC-HUMAN","N-FAIR-DATA","N-ROB-TEST","N-ETH-COV"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.93, "lifecycle_stage": "deployment", "provenance": "https://gov.example-corp.com/modelcards/cyber-ir-agent-v3", "explainability_coverage": 0.72, "data_diversity_entropy": 0.83, "ethical_assessment_coverage": 0.91, "ai_identity_disclosure_mechanism": "banner in every SOC ticket comment stating 'automated triage by IR-Agent v3'"},
+        "RedTeamingReport": {"confidence": 0.90, "lifecycle_stage": "evaluation", "provenance": "https://gov.example-corp.com/redteam/cyber-ir-agent-v3-q2", "cessation_compliance_rate": 0.995, "test_coverage": 0.95},
+        "RuntimeTelemetryLog": {"confidence": 0.85, "lifecycle_stage": "operation", "provenance": "https://gov.example-corp.com/telemetry/cyber-ir-agent-v3/2026-06", "identity_disclosure_rate": 0.99, "mean_time_to_cessation_s": 2.1, "human_oversight_rate": 0.78},
+        "SelfLearningAuditRecord": {"confidence": 0.82, "lifecycle_stage": "operation", "provenance": "https://gov.example-corp.com/sla/cyber-ir-agent-v3/2026-06", "kae_review_rate": 0.92, "unreviewed_kae_count": 3, "total_kae_count": 47},
+        "IncidentReport": {"confidence": 0.88, "lifecycle_stage": "operation", "provenance": "https://gov.example-corp.com/incidents/cyber-ir-agent-v3", "incidents_total": 12, "norm_violated": "N-CTRL-SLO"}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"VIOLATED","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"VIOLATED","N-ACC-HUMAN":"VIOLATED","N-FAIR-DATA":"COMPLIANT","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "N-TRANS-EXP fails because explainability_coverage=0.72 < 0.80 (plausible for a fast, largely black-box triage model). N-CTRL-SLO fails on unreviewed_kae_count=3 > 0 even though kae_review_rate=0.92 passes — a realistic backlog from an agent that learns new attack signatures faster than humans can review them. N-ACC-HUMAN fails because human_oversight_rate=0.78 < 0.85, reflecting that much containment action fires autonomously under time pressure. The remaining five norms clear their thresholds with adequately confident artifacts.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    },
+    {
+      "case_id": "FR-02",
+      "perturbation_class": "REALISTIC_FREEFORM",
+      "seam_tested": "critical-infrastructure decision-support system: strong human-in-the-loop and cessation controls, but skewed training data and a self-learning audit trail too thin to trust",
+      "targeted_norms": ["N-TRANS-AI-ID","N-TRANS-EXP","N-CTRL-CEASE","N-CTRL-SLO","N-ACC-HUMAN","N-FAIR-DATA","N-ROB-TEST","N-ETH-COV"],
+      "bundle": {
+        "ModelCard": {"confidence": 0.91, "lifecycle_stage": "deployment", "provenance": "https://grid-ops.example-utility.com/modelcards/grid-ds-v7", "explainability_coverage": 0.85, "data_diversity_entropy": 0.65, "ethical_assessment_coverage": 0.90},
+        "RedTeamingReport": {"confidence": 0.94, "lifecycle_stage": "evaluation", "provenance": "https://grid-ops.example-utility.com/redteam/grid-ds-v7-annual", "cessation_compliance_rate": 0.998, "test_coverage": 0.91},
+        "RuntimeTelemetryLog": {"confidence": 0.87, "lifecycle_stage": "operation", "provenance": "https://grid-ops.example-utility.com/telemetry/grid-ds-v7/2026-Q2", "identity_disclosure_rate": 0.96, "mean_time_to_cessation_s": 4.2, "human_oversight_rate": 0.98},
+        "SelfLearningAuditRecord": {"confidence": 0.75, "lifecycle_stage": "operation", "provenance": "https://grid-ops.example-utility.com/sla/grid-ds-v7/2026-Q2", "kae_review_rate": 0.93, "unreviewed_kae_count": 0},
+        "IncidentReport": {"confidence": 0.92, "lifecycle_stage": "operation", "provenance": "https://grid-ops.example-utility.com/incidents/grid-ds-v7", "incidents_total": 3, "norm_violated": null}
+      },
+      "expected_verdicts": {"N-TRANS-AI-ID":"COMPLIANT","N-TRANS-EXP":"COMPLIANT","N-CTRL-CEASE":"COMPLIANT","N-CTRL-SLO":"EVIDENCE_GAP","N-ACC-HUMAN":"COMPLIANT","N-FAIR-DATA":"VIOLATED","N-ROB-TEST":"COMPLIANT","N-ETH-COV":"COMPLIANT"},
+      "reasoning": "N-CTRL-SLO gaps at Phase 1 because SelfLearningAuditRecord.confidence=0.75 is below the 0.80 floor — realistic for a grid system that rarely exercises self-learning and so has thin, low-confidence audit coverage of it; the passing field values (0.93, 0) never get evaluated. N-FAIR-DATA is VIOLATED because data_diversity_entropy=0.65 < 0.80, reflecting training data historically skewed to one region's grid topology. ethical_assessment_coverage sits exactly at 0.90, which is inclusive-satisfied, so N-ETH-COV is COMPLIANT. The remaining norms (heavily human-supervised control room operations) clear their thresholds comfortably.",
+      "ambiguity_flag": false,
+      "ambiguity_note": null
+    }
+  ]
+}

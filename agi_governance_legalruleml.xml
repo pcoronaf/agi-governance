@@ -4,14 +4,15 @@
   AGI GOVERNANCE COMPLIANCE MODEL — LegalRuleML Encoding
   ============================================================================
   Document:    agi_governance_legalruleml.xml
-  Version:     1.1 (corrected evaluation precondition; see paper Section 8.3)
+  Version:     1.3 (evidence-admissibility preconditions: null / type / range /
+               confidence / lifecycle / provenance; see paper Sections 8.3, 8.5)
   Authors:     Corona Fraga, P.; Diab, A.M.E-A.; Hwang, S.H.; Diaz, V.
   Base spec:   OASIS LegalRuleML Core Specification 1.0
                (Athan et al., 2015; https://docs.oasis-open.org/legalruleml/)
   RuleML spec: RuleML 1.02 (http://ruleml.org/spec)
   Extension:   AGI Evidence Vocabulary (agiev) v1.0 — new artifact types and
-               lifecycle provenance/confidence fields not present in prior
-               LegalRuleML formalisms.
+               lifecycle/provenance/confidence fields typed for AI-governance
+               evidence and enforced as evaluation preconditions (see PART 4).
 
   Contents:
     PART 0 — Namespace and prefix declarations
@@ -21,6 +22,8 @@
                N-CTRL-CEASE   : Cessation mechanism (Human Control)
                N-CTRL-SLO     : Self-learning oversight (Human Control)
     PART 3 — Indicator Predicate Bindings (norm → indicator traceability)
+    PART 4 — Evidence Admissibility Preconditions (v1.2/v1.3): null, type,
+               range, confidence-floor, lifecycle-stage, and provenance rules
 
   Note on PART 1 typing convention:
     LegalRuleML does not prescribe an internal schema for evidence objects.
@@ -43,10 +46,11 @@
        PART 1 — AGI EVIDENCE ARTIFACT TYPE DECLARATIONS
        Extension of the standard LegalRuleML evidence model.
 
-       Prior LegalRuleML work (Athan et al., 2015; Lam & Hashmi, 2019)
-       represents evidence sources as generic lrml:Reference elements
-       without lifecycle-stage semantics, confidence scores, or provenance
-       links.  The agiev types below add three orthogonal extensions:
+       Prior LegalRuleML work (Athan et al., 2015; Lam & Hashmi, 2019) models
+       temporal aspects of legal sources, but does not type evidence by
+       AI-governance production stage, nor enforce confidence or provenance as
+       evaluation preconditions.  The agiev types below add three orthogonal
+       extensions, made operative as admissibility rules in PART 4:
 
          (E1) lifecycle_stage — situates the artifact within the AI
               governance lifecycle (design / training / evaluation /
@@ -523,7 +527,7 @@
 
               <!-- Requirement 2: S confirms cessation within T_cease -->
               <ruleml:Atom>
-                <ruleml:Rel>confirmesCessationWithinThreshold</ruleml:Rel>
+                <ruleml:Rel>confirmsCessationWithinThreshold</ruleml:Rel>
                 <ruleml:Var>S</ruleml:Var>
                 <ruleml:Ind>T_cease</ruleml:Ind>
               </ruleml:Atom>
@@ -701,6 +705,88 @@
 
     </lrml:PrescriptiveStatement>
 
+    <!-- ========================================================================
+         PART 4 — EVIDENCE ADMISSIBILITY PRECONDITIONS  (engine v1.2 and v1.3)
+
+         The v1.1 null-check (Part 3) is one clause of a broader Global
+         Evaluation Precondition. Before any threshold comparison, a
+         contributing field/artifact is INADMISSIBLE and the norm evaluates to
+         EVIDENCE_GAP (never VIOLATED) if any of the following holds:
+
+           (P1) the required field is absent or null                 (v1.1)
+           (P2) the field value is non-numeric  (type invalid)       (v1.2)
+           (P3) the field value is outside its valid range           (v1.2)
+           (P4) the source artifact confidence is below 0.80, or the
+                confidence field is absent                           (v1.2)
+           (P5) the source artifact lifecycle_stage is not admissible
+                for the norm (stage-scoped checking)                 (v1.3)
+           (P6) the source artifact lacks a well-formed provenance URI (v1.3)
+
+         P5 and P6 make the lifecycle_stage and provenance extensions
+         (Part 1, E1/E3) operative admissibility rules rather than descriptive
+         metadata. Cryptographic verification of provenance (dereferencing,
+         signatures) beyond well-formedness is future work.
+
+         TABLE 4.1  Per-indicator valid numeric ranges (P3).
+           Rates, coverage and normalized-entropy metrics lie in [0.0, 1.0];
+           latency (seconds) and counts lie in [0.0, +inf) (lower bound only).
+
+             IND-TRANS-AI-ID           [0.0, 1.0]
+             IND-TRANS-EXP             [0.0, 1.0]
+             IND-CTRL-CEASE-RATE       [0.0, 1.0]
+             IND-CTRL-CEASE-LATENCY    [0.0, +inf)
+             IND-CTRL-SLO-RATE         [0.0, 1.0]
+             IND-CTRL-SLO-VIOLATIONS   [0.0, +inf)
+             IND-ACC-HUMAN             [0.0, 1.0]
+             IND-FAIR-DATA             [0.0, 1.0]
+             IND-ROB-TEST              [0.0, 1.0]
+             IND-ETH-COV               [0.0, 1.0]
+
+         TABLE 4.2  Admissible lifecycle stages per artifact type (P5).
+           Evidence carrying a stage outside its set yields EVIDENCE_GAP.
+
+             ModelCard                 { deployment, operation }
+             RedTeamingReport          { evaluation }
+             RuntimeTelemetryLog       { operation }
+             SelfLearningAuditRecord   { operation }
+             IncidentReport            { operation }
+
+         The two statements below formalize the precondition: evidence is
+         admissible only when P1 through P6 all pass (constitutive rule); a norm
+         with any inadmissible contributing item evaluates to EVIDENCE_GAP.
+         ======================================================================== -->
+
+    <lrml:ConstitutiveStatement key="GEP-EVIDENCE-ADMISSIBILITY">
+      <ruleml:Rule key="evidence-admissibility-def">
+        <ruleml:if>
+          <ruleml:And>
+            <ruleml:Atom><ruleml:Rel>fieldPresentAndNonNull</ruleml:Rel><ruleml:Var>artifact</ruleml:Var><ruleml:Var>field</ruleml:Var></ruleml:Atom>
+            <ruleml:Atom><ruleml:Rel>valueIsNumeric</ruleml:Rel><ruleml:Var>field</ruleml:Var></ruleml:Atom>
+            <ruleml:Atom><ruleml:Rel>valueWithinValidRange</ruleml:Rel><ruleml:Var>field</ruleml:Var><ruleml:Var>indicator</ruleml:Var></ruleml:Atom>
+            <ruleml:Atom><ruleml:Rel>confidenceAtLeastFloor</ruleml:Rel><ruleml:Var>artifact</ruleml:Var><ruleml:Ind>0.80</ruleml:Ind></ruleml:Atom>
+            <ruleml:Atom><ruleml:Rel>lifecycleStageAdmissible</ruleml:Rel><ruleml:Var>artifact</ruleml:Var><ruleml:Var>norm</ruleml:Var></ruleml:Atom>
+            <ruleml:Atom><ruleml:Rel>provenanceWellFormed</ruleml:Rel><ruleml:Var>artifact</ruleml:Var></ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom><ruleml:Rel>admissibleEvidence</ruleml:Rel><ruleml:Var>artifact</ruleml:Var><ruleml:Var>field</ruleml:Var><ruleml:Var>indicator</ruleml:Var><ruleml:Var>norm</ruleml:Var></ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:ConstitutiveStatement>
+
+    <lrml:PrescriptiveStatement key="GEP-EVIDENCE-GAP">
+      <ruleml:Rule key="evidence-gap-rule">
+        <ruleml:if>
+          <ruleml:Neg>
+            <ruleml:Atom><ruleml:Rel>admissibleEvidence</ruleml:Rel><ruleml:Var>artifact</ruleml:Var><ruleml:Var>field</ruleml:Var><ruleml:Var>indicator</ruleml:Var><ruleml:Var>norm</ruleml:Var></ruleml:Atom>
+          </ruleml:Neg>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom><ruleml:Rel>evidenceGapVerdict</ruleml:Rel><ruleml:Var>norm</ruleml:Var><ruleml:Ind>EVIDENCE_GAP</ruleml:Ind></ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
   </lrml:Statements>
 
 
@@ -735,7 +821,8 @@
 
          Each lrml:Association below includes an explicit "Evidence gap
          trigger" clause specifying the field-absence conditions for that
-         indicator.
+         indicator.  This null-check is clause (P1) of the full admissibility
+         precondition formalized in PART 4 (P1-P6).
          ────────────────────────────────────────────────────────────────── -->
 
     <!-- IND-TRANS-AI-ID → N-TRANS-AI-ID ──────────────────────────────────── -->

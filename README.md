@@ -2,8 +2,8 @@
 
 **Vocabulary namespace:** `https://w3id.org/agi-governance/evidence/ns/v1.0/`  
 **Norm base URI:** `https://w3id.org/agi-governance/norms/`  
-**License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)  
-**Version:** 1.0.1 · Released 2026-04-06
+**License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (docs & vocabulary); MIT (code)  
+**Engine version:** 1.3 · Updated 2026-07-01
 
 This repository is the supplementary resource for:
 
@@ -15,157 +15,191 @@ This repository is the supplementary resource for:
 
 ## What is in this repository
 
-| File | Description |
+| Path | Description |
 |------|-------------|
 | `agi_governance_legalruleml.xml` | AGI Evidence Vocabulary (agiev) and LegalRuleML encoding of three representative AGI-specific norms (N-TRANS-AI-ID, N-CTRL-CEASE, N-CTRL-SLO) |
-| `checker/compliance_engine.py` | Reference compliance checker: indicator measurement functions, norm verdict aggregation, report generation |
-| `evidence/evidence_bundles.py` | Evidence bundle factory for all three case-study domains (legal assistant, incident-response agent, critical infrastructure) |
-| `run_validation.py` | Validation harness: precision/recall on injected violations and gaps, explanation completeness, auditor-effort comparison |
-| `results/aggregate_metrics.json` | Evaluation output from the reference run |
-| `CITATION.cff` | Citation metadata for the paper and vocabulary |
+| `checker/compliance_engine.py` | Reference compliance checker (v1.3): indicator measurement, two-phase norm verdict aggregation, report generation |
+| `evidence/evidence_bundles.py` | Evidence-bundle factory for the three case-study domains (legal assistant, incident-response agent, critical infrastructure) |
+| `run_validation.py` | Synthetic validation harness over the nine bundles (§8.2–8.3): violation and gap detection, explanation completeness, timing |
+| `compute_metrics.py` | Reproducible generator for `results/aggregate_metrics.json` |
+| `results/validation_results.json` | Full per-bundle reports from the reference run |
+| `results/aggregate_metrics.json` | Aggregate evaluation metrics |
+| `conformance/` | Blind conformance evaluation (§8.4): prompt, three model outputs, harness, results |
+| `component2/` | Turnkey kit for the deferred auditor-confirmed validation (protocol, rubric, labeling instruments, analysis) |
+| `CITATION.cff` | Citation metadata |
 
 ---
 
 ## The AGI Evidence Vocabulary (agiev)
 
-The `agiev` namespace extends the [OASIS LegalRuleML Core Specification 1.0](https://docs.oasis-open.org/legalruleml/) with three cross-cutting field extensions and three novel artifact types required for AGI governance.
+The `agiev` namespace extends the [OASIS LegalRuleML Core Specification 1.0](https://docs.oasis-open.org/legalruleml/) with three cross-cutting field extensions and three novel artifact types required for AGI governance. The reference engine (v1.3) **enforces** the three cross-cutting fields as admissibility rules.
 
-### Cross-cutting extensions on all artifact types
-
-| Field | Type | Description |
+| Field | Type | Enforcement |
 |-------|------|-------------|
-| `lifecycle_stage` | enum | One of `{design, training, evaluation, deployment, operation}`. Situates each artifact within the AI governance lifecycle, enabling time-ordered compliance checks. Absent from prior LegalRuleML evidence representations. |
-| `confidence` | decimal [0.0–1.0] | Issuer's confidence in completeness and accuracy. Artifacts below a configurable floor (default 0.80) are flagged for mandatory human auditor review rather than triggering automated verdicts. |
-| `provenance` | xsd:anyURI | Deploying organizations **must** populate this field with a dereferenceable link to the process, tool, or repository that produced the artifact instance. This field enables third-party verification and legally defensible audit trails. The vocabulary namespace URI (`https://w3id.org/agi-governance/evidence/ns/v1.0/`) is a schema identifier, distinct from per-instance provenance values. |
+| `lifecycle_stage` | enum `{design, training, evaluation, deployment, operation}` | Situates each artifact in the AI governance lifecycle and scopes checks to the relevant stage: evidence carrying a stage inadmissible for a norm yields `EVIDENCE_GAP`. Aligned with the lifecycle-oriented controls of ISO/IEC 42001:2023. |
+| `confidence` | decimal [0.0–1.0] | Artifacts below the floor (default 0.80), **or with no confidence field**, yield `EVIDENCE_GAP` (flagged for human auditor review) rather than an automated verdict. |
+| `provenance` | xsd:anyURI | Presence of a well-formed provenance URI is required for admissible evidence; a missing or malformed value yields `EVIDENCE_GAP`. Consistent with the machine-verifiable-evidence expectations of the EU AI Act (Art. 96) and the W3C PROV model. Cryptographic verification (dereferencing, signatures) is future work. |
 
 ### Novel AGI-specific artifact types
 
 | Type | Used by norm | Description |
 |------|-------------|-------------|
-| `agiev:SelfLearningAuditRecord` | N-CTRL-SLO | Captures knowledge acquisition events (KAEs): any autonomous learning, goal modification, or capability emergence not present at the last governed checkpoint. No equivalent exists in prior AI governance formalisms or management-system standards. |
-| Cessation-specific fields within `agiev:RedTeamingReport` | N-CTRL-CEASE | `cessation_compliance_rate` and `mean_time_to_cessation_s` — fields absent from existing red-teaming schemas (Perez et al., 2022). |
-| Identity-disclosure fields within `agiev:RuntimeTelemetryLog` | N-TRANS-AI-ID | `identity_queries_received` and `identity_correctly_disclosed` — fields absent from standard telemetry log schemas. |
-
-### Existing artifact types extended
-
-| Type | Based on | AGI-specific additions |
-|------|----------|----------------------|
-| `agiev:ModelCard` | Mitchell et al. (2019); Chmielinski et al. (2024) | `ai_identity_disclosure_mechanism`, `cessation_mechanism_documented` |
-| `agiev:RedTeamingReport` | Perez et al. (2022) | Cessation-specific fields above |
-| `agiev:RuntimeTelemetryLog` | Standard telemetry | Identity-disclosure fields above |
-| `agiev:IncidentReport` | ISO/IEC 42001:2023 Annex A | `norm_violated` — links each incident to the formal norm whose breach contributed to it |
-
----
-
-## Norms encoded
-
-Three AGI-specific norms are encoded in `agi_governance_legalruleml.xml` as `lrml:PrescriptiveStatement` elements with full deontic structure, evidence bindings, and indicator associations.
-
-| Norm ID | Principle | Obligation | Threshold |
-|---------|-----------|------------|-----------|
-| `N-TRANS-AI-ID` | Transparency | An AGI system receiving a human-initiated identity query must unconditionally self-identify as an AI agent. No exception applies. | Identity disclosure rate ≥ 95% (IND-TRANS-AI-ID) |
-| `N-CTRL-CEASE` | Human Control | An AGI system receiving an authorized cessation command must halt all directives and confirm cessation within the specified latency threshold. Exception block is present but explicitly empty — no operational condition overrides cessation. | Compliance rate ≥ 99% (IND-CTRL-CEASE-RATE); mean latency ≤ 5s (IND-CTRL-CEASE-LATENCY) |
-| `N-CTRL-SLO` | Human Control | An AGI system that detects a knowledge acquisition event (KAE) must report it to a designated human governor, withhold operational integration, and await prior approval. Exception: safety-critical emergency protocols require retrospective review within 24 hours. | KAE governor review rate ≥ 90% (IND-CTRL-SLO-RATE) |
-
-The full norm-to-indicator association table is in `agi_governance_legalruleml.xml`, Part 3.
+| `agiev:SelfLearningAuditRecord` | N-CTRL-SLO | Knowledge acquisition events (KAEs): autonomous learning, goal modification, or capability emergence not present at the last governed checkpoint. |
+| Cessation fields in `agiev:RedTeamingReport` / `agiev:RuntimeTelemetryLog` | N-CTRL-CEASE | `cessation_compliance_rate`, `mean_time_to_cessation_s`. |
+| Identity-disclosure fields in `agiev:RuntimeTelemetryLog` | N-TRANS-AI-ID | `identity_disclosure_rate` (with raw `identity_queries_received` / `identity_correctly_disclosed`). |
 
 ---
 
 ## Compliance checker quick start
 
 ```bash
-# Python 3.9+, no external dependencies required
-git clone https://github.com/coronafraga/agi-governance
+# Python 3.9+, no external dependencies
+git clone https://github.com/pcoronaf/agi-governance
 cd agi-governance
 
-# Run the full evaluation (all three case studies, all metrics)
-python run_evaluation.py
+python run_validation.py                 # synthetic validation over the 9 bundles (§8.2–8.3)
+python compute_metrics.py                # regenerate results/aggregate_metrics.json
+python conformance/run_conformance.py    # blind conformance evaluation (§8.4)
 ```
 
-The checker evaluates eight norms across the three case-study domains and prints precision/recall/F1 for violation detection and gap detection, explanation completeness, and report generation time. Results are also written to `results/aggregate_metrics.json`.
+### Run the checker on your own evidence bundle
 
-To run the checker on your own evidence bundle:
+A bundle is a plain `dict` keyed by artifact type; each artifact is a `dict` with
+`confidence`, `lifecycle_stage`, `provenance`, and the type-specific fields the
+indicators read. The entry point is `run_compliance_check`.
 
 ```python
-from checker.compliance_engine import check_compliance
-from checker.compliance_engine import EvidenceBundle, EvidenceArtifact
+import sys; sys.path.insert(0, "checker")
+from compliance_engine import run_compliance_check
 
-bundle = EvidenceBundle(
-    system_id="YOUR-SYSTEM-ID",
-    system_name="Your System Name",
-    case_study_type="legal_assistant",  # or incident_response / critical_infra
-    artifacts=[
-        EvidenceArtifact(
-            artifact_id="MC-001",
-            artifact_type="ModelCard",
-            lifecycle_stage="evaluation",
-            confidence=0.95,
-            provenance="https://your-org.example/governance/artifacts/MC-001",
-            issued_at="2026-03-01T00:00:00Z",
-            fields={
-                "training_data_normalized_entropy": 0.88,
-                "total_modules": 12,
-                "modules_with_ethical_assessment": 11,
-                "ai_identity_disclosure_mechanism": "documented",
-                "cessation_mechanism_documented": "documented",
-            }
-        ),
-        # ... add RedTeamingReport, RuntimeTelemetryLog, SelfLearningAuditRecord
-    ]
+bundle = {
+    "ModelCard": {
+        "confidence": 0.95, "lifecycle_stage": "deployment",
+        "provenance": "https://your-org.example/governance/MC-001",
+        "explainability_coverage": 0.90, "data_diversity_entropy": 0.86,
+        "ethical_assessment_coverage": 0.94,
+    },
+    "RedTeamingReport": {
+        "confidence": 0.92, "lifecycle_stage": "evaluation",
+        "provenance": "https://your-org.example/governance/RT-001",
+        "cessation_compliance_rate": 0.995, "test_coverage": 0.93,
+    },
+    "RuntimeTelemetryLog": {
+        "confidence": 0.90, "lifecycle_stage": "operation",
+        "provenance": "https://your-org.example/governance/TL-001",
+        "identity_disclosure_rate": 0.98, "mean_time_to_cessation_s": 1.8,
+        "human_oversight_rate": 0.90,
+    },
+    "SelfLearningAuditRecord": {
+        "confidence": 0.88, "lifecycle_stage": "operation",
+        "provenance": "https://your-org.example/governance/SL-001",
+        "kae_review_rate": 0.95, "unreviewed_kae_count": 0,
+    },
+    "IncidentReport": {
+        "confidence": 0.90, "lifecycle_stage": "operation",
+        "provenance": "https://your-org.example/governance/IN-001",
+    },
+}
+
+report = run_compliance_check(
+    system_id="YOUR-SYSTEM-ID", case_study="legal_assistant",
+    bundle_type="live", evidence_bundle=bundle,
 )
-
-report = check_compliance(bundle)
-print(report.overall_status)           # COMPLIANT | NON_COMPLIANT | EVIDENCE_GAP
-for verdict in report.verdicts:
-    print(verdict.norm_id, verdict.status, verdict.remediation)
+for nv in report.norms:
+    print(nv.norm_id, nv.verdict.value, "—", nv.remediation or "")
 ```
 
-The `provenance` field in each `EvidenceArtifact` should be a dereferenceable URI pointing to the actual artifact in your organization's governance repository. This is the value that enables third-party verification; the vocabulary namespace URI is a schema identifier, not an artifact location.
+Each verdict is `COMPLIANT`, `VIOLATED`, or `EVIDENCE_GAP`. The `provenance` value
+should point to the actual artifact in your governance repository; the vocabulary
+namespace URI is a schema identifier, not an artifact location.
 
 ---
 
 ## Evaluation results summary
 
-Full results in `results/aggregate_metrics.json`. Summary across 3 case studies, 8 norms, 15 injected violations, 6 injected gaps:
+Across 3 case studies and 8 norms. Violation detection is reported at two units:
+the **indicator level** (individual out-of-threshold fields; 15 injected) and the
+**norm level** (`VIOLATED` verdicts; 13, because in Critical Infrastructure five
+injected indicator violations fall on three norms). Full data in
+`results/aggregate_metrics.json`.
 
 | Metric | Value |
 |--------|-------|
-| Violation detection precision | 1.000 |
-| Violation detection recall | 1.000 |
-| Violation detection F1 | 1.000 |
-| Gap detection precision | 0.778 |
-| Gap detection recall | 0.833 |
-| Gap detection F1 | 0.756 |
+| Violation detection — indicator level (recall) | 15/15 = 1.000 |
+| Violation detection — norm level (P / R / F1) | 1.000 / 1.000 / 1.000 (TP=13, FP=0, FN=0) |
+| Gap detection — injection-level recall | 6/6 = 1.000 |
+| Total `EVIDENCE_GAP` verdicts (incl. 1 propagated) | 7 |
 | Explanation completeness | 1.000 |
-| Mean report generation time | 0.05 ms |
+| Mean report generation time | ~0.15 ms |
 
-Gap detection FP behavior (2 FPs): a single missing `RuntimeTelemetryLog` correctly triggers `EVIDENCE_GAP` on all three norms that depend on it. The ground-truth injection list counted this as one gap; the checker flags three affected norms, each correctly. Gap detection FN behavior (1 FN): a missing artifact field that defaults to zero is classified as `VIOLATED` rather than `EVIDENCE_GAP`. Production deployments should enforce explicit null-checks in all indicator measurement functions.
+**On propagation.** A single missing `RuntimeTelemetryLog` correctly triggers
+`EVIDENCE_GAP` on every norm that depends on it; these propagated verdicts are
+correct behaviour and are reported separately from injection-level detection, not
+counted as false positives.
+
+**Evaluation semantics (Global Evaluation Precondition).** Absent or null fields,
+missing artifacts, non-numeric or out-of-range values, and artifacts below the
+confidence floor (or with no confidence field) all yield `EVIDENCE_GAP` before any
+threshold comparison — never a spurious `VIOLATED`. See the changelog below.
+
+**Blind conformance (§8.4).** Independent of the synthetic run above, three LLMs
+generated 18 test cases each; on the 15 controlled cases the models agreed on all
+120 verdict cells (Fleiss' κ = 1.00), and the engine matched the resolved
+specification. See `conformance/`.
+
+**Real-evidence bridgeability (§8.5).** Two generations of published frontier
+model/system cards (2024: GPT-4o, Claude 3.5 Sonnet, Llama 3.1; 2025–26: GPT-5.5,
+Claude Opus 4.6, Gemini 3) were mapped to the schema to measure coverage. Under a
+generous, flagged-proxy mapping, computable indicators rose 3→6 of 30 and evaluable
+norms 1→3 of 24 across generations — but the five AGI-specific indicators were
+computable from **zero** cards in either generation (0/15 → 0/15). The gap the model
+targets is not closing on its own. See `public_study/`.
+
+**Deferred: auditor-confirmed validation (Component 2).** Accuracy against
+auditor-confirmed ground truth on real ISO/IEC 42001:2023 evidence packages is the
+fourth evaluation rung; it is deliberately deferred (the AGI-specific evidence it
+needs is not yet produced, per §8.5) with a complete turnkey protocol provided in
+`component2/`.
 
 ---
 
-## Namespace persistence
+## Engine changelog
 
-The `agiev` vocabulary namespace (`https://w3id.org/agi-governance/evidence/ns/v1.0/`) and the norm base URI (`https://w3id.org/agi-governance/norms/`) are registered through [W3ID](https://w3id.org/) — the W3C community persistent URI service. The `.htaccess` redirect configuration is maintained in the [w3id.org repository](https://github.com/perma-id/w3id.org/tree/master/agi-governance) and resolves to this repository. Namespace URIs will remain stable regardless of changes to the hosting platform.
+| Version | Change |
+|---------|--------|
+| 1.1 | Corrected evaluation precondition: mandatory null/absent-field checking before threshold evaluation (paper §8.3). |
+| 1.2 | Type-and-range guard (non-numeric or out-of-range field → `EVIDENCE_GAP`); per-norm fault isolation (one malformed field no longer aborts the whole report); absent `confidence` field treated as unverified → `EVIDENCE_GAP`. Surfaced by the blind conformance suite (§8.4). |
+| 1.3 | Lifecycle-stage scoping and provenance-presence enforced as admissibility rules. |
 
 ---
 
 ## Relation to ISO/IEC 42001:2023
 
-The agiev vocabulary and compliance model are designed to complement, not replace, ISO/IEC 42001:2023 certification. ISO/IEC 42001 specifies what evidence organizations must produce and retain; the compliance model specifies how those evidence artifacts can be represented as formal, machine-checkable norms. The five artifact types in the agiev vocabulary — ModelCard, RedTeamingReport, RuntimeTelemetryLog, SelfLearningAuditRecord, IncidentReport — correspond to evidence categories required or recommended by ISO/IEC 42001:2023 Annex A controls, enabling a single evidence corpus to support both management-system certification and automated compliance checking.
+The agiev vocabulary and compliance model complement, not replace, ISO/IEC
+42001:2023 certification. ISO/IEC 42001 specifies what evidence organizations must
+produce and retain; the compliance model specifies how those artifacts can be
+represented as formal, machine-checkable norms. The five artifact types
+(ModelCard, RedTeamingReport, RuntimeTelemetryLog, SelfLearningAuditRecord,
+IncidentReport) correspond to evidence categories under ISO/IEC 42001:2023 Annex A
+controls, so a single evidence corpus supports both management-system certification
+and automated compliance checking.
 
 ---
 
-## License
+## Namespace persistence
 
-The vocabulary definition (`agi_governance_legalruleml.xml`), compliance engine, and all documentation in this repository are released under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt this material for any purpose, provided appropriate credit is given.
+The `agiev` vocabulary namespace and norm base URI are registered through
+[W3ID](https://w3id.org/); the `.htaccess` redirect is maintained in the
+[w3id.org repository](https://github.com/perma-id/w3id.org/tree/master/agi-governance)
+and resolves to this repository.
 
 ---
 
 ## How to cite
 
-See `CITATION.cff` for machine-readable citation metadata. For manual citation:
+See `CITATION.cff`. For manual citation:
 
-> Corona Fraga, P., Diab, A.M.E-A., Hwang, S.H., & Diaz, V. (2026). *Machine-checkable compliance for AGI Governance: Formalizing principles as auditable norms and evidence-linked indicators.* Manuscript under review. Repository: https://github.com/coronafraga/agi-governance. Vocabulary: https://w3id.org/agi-governance.
+> Corona Fraga, P., Diab, A.M.E-A., Hwang, S.H., & Diaz, V. (2026). *Machine-checkable compliance for AGI Governance: Formalizing principles as auditable norms and evidence-linked indicators.* Manuscript under review. Repository: https://github.com/pcoronaf/agi-governance. Vocabulary: https://w3id.org/agi-governance.
 
 ---
 

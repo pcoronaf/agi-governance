@@ -412,3 +412,27 @@ ALL_BUNDLES = {
         "gap": INFRA_GAP,
     },
 }
+
+
+# ====================================================================
+# v1.3 re-baseline: provenance URIs
+# --------------------------------------------------------------------
+# Every artifact is assigned a provenance URI so that provenance-presence
+# can be enforced (Section 5.1). URIs are synthetic, consistent with the
+# synthetic nature of these bundles; enforcement checks presence and
+# well-formedness, not dereferenceability (cryptographic verification is
+# future work, Section 10).
+# ====================================================================
+_ARTIFACT_TYPES = (
+    "ModelCard", "RedTeamingReport", "RuntimeTelemetryLog",
+    "SelfLearningAuditRecord", "IncidentReport",
+)
+for _domain, _bundles in ALL_BUNDLES.items():
+    _slug = _domain.lower().replace(" ", "-")
+    for _bt, _bundle in _bundles.items():
+        for _atype in _ARTIFACT_TYPES:
+            _art = _bundle.get(_atype)
+            if _art is not None and "provenance" not in _art:
+                _art["provenance"] = (
+                    f"https://registry.example.org/{_slug}/{_bt}/{_atype}"
+                )

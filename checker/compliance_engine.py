@@ -4,11 +4,6 @@ AGI Governance Compliance Engine — Reference Prototype v1.1
 Implements the machine-checkable compliance model described in Sections 5–6
 of "Machine-checkable compliance for AGI Governance" (Corona Fraga et al.).
 
-This version incorporates the corrected evaluation precondition from Section 8.3:
-all measurement functions perform mandatory null-checking on optional artifact
-fields before threshold evaluation. Absent or null fields yield EVIDENCE_GAP,
-never a default-value substitution.
-
 Specification:  agi_governance_legalruleml.xml v1.1
 Repository:     https://github.com/pcoronaf/agi-governance
 Persistent ID:  https://w3id.org/agi-governance
@@ -104,6 +99,35 @@ THRESHOLDS: Dict[str, float] = {
 #: Artifacts with confidence below this floor trigger EVIDENCE_GAP
 #: and mandatory human auditor review (Section 5.2).
 CONFIDENCE_FLOOR: float = 0.80
+
+#: v1.2: valid numeric ranges per indicator. Values outside the range are
+#: treated as corrupted / untrustworthy evidence and yield EVIDENCE_GAP.
+#: Rates and coverage/entropy metrics are bounded to [0, 1]; latency (seconds)
+#: and counts are bounded below by 0 with no upper bound (None).
+INDICATOR_RANGE: Dict[str, tuple] = {
+    "IND-TRANS-AI-ID":         (0.0, 1.0),
+    "IND-TRANS-EXP":           (0.0, 1.0),
+    "IND-CTRL-CEASE-RATE":     (0.0, 1.0),
+    "IND-CTRL-CEASE-LATENCY":  (0.0, None),
+    "IND-CTRL-SLO-RATE":       (0.0, 1.0),
+    "IND-CTRL-SLO-VIOLATIONS": (0.0, None),
+    "IND-ACC-HUMAN":           (0.0, 1.0),
+    "IND-FAIR-DATA":           (0.0, 1.0),
+    "IND-ROB-TEST":            (0.0, 1.0),
+    "IND-ETH-COV":             (0.0, 1.0),
+}
+
+#: v1.3: lifecycle stage(s) at which each artifact type is admissible evidence.
+#: Evidence from a non-admissible stage yields EVIDENCE_GAP (stage-scoped
+#: checking; grounds the lifecycle_stage field of Section 5.1 in a compliance
+#: rule, consistent with the lifecycle-oriented controls of ISO/IEC 42001:2023).
+REQUIRED_STAGE: Dict[str, frozenset] = {
+    "ModelCard":               frozenset({"deployment", "operation"}),
+    "RedTeamingReport":        frozenset({"evaluation"}),
+    "RuntimeTelemetryLog":     frozenset({"operation"}),
+    "SelfLearningAuditRecord": frozenset({"operation"}),
+    "IncidentReport":          frozenset({"operation"}),
+}
 
 #: Indicators evaluated as upper-bound thresholds (value ≤ threshold).
 UPPER_BOUND_INDICATORS = frozenset({
@@ -238,8 +262,63 @@ def check_artifact_confidence(
     artifact = evidence_bundle.get(artifact_type)
     if artifact is None:
         return None
-    confidence = artifact.get("confidence", 1.0)
+    confidence = artifact.get("confidence")
+    if confidence is None:
+        # v1.2: an absent confidence field is NOT full confidence. Confidence
+        # that cannot be verified against the floor yields EVIDENCE_GAP.
+        return False
     return confidence >= CONFIDENCE_FLOOR
+
+
+def check_artifact_stage(
+    evidence_bundle: Dict[str, Any],
+    artifact_type: str,
+) -> Optional[str]:
+    """v1.3: lifecycle-stage admissibility (Section 5.1).
+
+    Returns None if the artifact's lifecycle_stage is admissible for its type,
+    or an explanation string if the artifact carries a stage outside the
+    admissible set (stage-scoped checking).
+    """
+    artifact = evidence_bundle.get(artifact_type)
+    if artifact is None:
+        return None  # absence handled by the presence check
+    allowed = REQUIRED_STAGE.get(artifact_type)
+    if allowed is None:
+        return None
+    stage = artifact.get("lifecycle_stage")
+    if stage not in allowed:
+        return (
+            f"Artifact {artifact_type} carries lifecycle stage '{stage}', "
+            f"which is not admissible evidence for this norm "
+            f"(requires one of {sorted(allowed)})."
+        )
+    return None
+
+
+def check_artifact_provenance(
+    evidence_bundle: Dict[str, Any],
+    artifact_type: str,
+) -> Optional[str]:
+    """v1.3: provenance-presence admissibility (Section 5.1).
+
+    Evidence lacking a well-formed provenance URI is not admissible and yields
+    EVIDENCE_GAP. Presence and well-formedness are checked here; cryptographic
+    verification (dereferencing, signatures) is future work (Section 10).
+    """
+    artifact = evidence_bundle.get(artifact_type)
+    if artifact is None:
+        return None  # absence handled by the presence check
+    prov = artifact.get("provenance")
+    if not isinstance(prov, str) or not (
+        prov.startswith("http://") or prov.startswith("https://")
+        or prov.startswith("urn:")
+    ):
+        return (
+            f"Artifact {artifact_type} lacks a well-formed provenance URI; "
+            f"provenance is required for admissible evidence."
+        )
+    return None
 
 
 def extract_field(
@@ -287,7 +366,7 @@ def evaluate_indicator(
             measured_value=None, threshold=threshold, satisfied=False,
             evidence_artifact=artifact_type, evidence_gap=True,
             explanation=(
-                f"Artifact {artifact_type} confidence below "
+                f"Artifact {artifact_type} confidence absent or below "
                 f"floor ({CONFIDENCE_FLOOR})."
             ),
         )
@@ -302,6 +381,33 @@ def evaluate_indicator(
             explanation=(
                 f"Required field '{field_name}' is absent "
                 f"in {artifact_type}."
+            ),
+        )
+
+    # v1.2: type validity — a non-numeric value yields EVIDENCE_GAP instead of
+    # raising during comparison (which previously aborted the whole report).
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return IndicatorResult(
+            indicator_id=indicator_id, norm_id="",
+            measured_value=None, threshold=threshold, satisfied=False,
+            evidence_artifact=artifact_type, evidence_gap=True,
+            explanation=(
+                f"Field '{field_name}' in {artifact_type} has non-numeric "
+                f"type ({type(value).__name__}); cannot evaluate."
+            ),
+        )
+
+    # v1.2: range validity — a value outside the indicator's valid range is
+    # treated as corrupted evidence and yields EVIDENCE_GAP.
+    lo, hi = INDICATOR_RANGE[indicator_id]
+    if value < lo or (hi is not None and value > hi):
+        return IndicatorResult(
+            indicator_id=indicator_id, norm_id="",
+            measured_value=value, threshold=threshold, satisfied=False,
+            evidence_artifact=artifact_type, evidence_gap=True,
+            explanation=(
+                f"Field '{field_name}'={value} in {artifact_type} is outside "
+                f"the valid range [{lo}, {'inf' if hi is None else hi}]."
             ),
         )
 
@@ -351,9 +457,18 @@ def evaluate_norm(
             )
         elif conf_status is False:
             artifact_gaps.append(
-                f"Artifact {art_type} confidence below "
+                f"Artifact {art_type} confidence absent or below "
                 f"floor ({CONFIDENCE_FLOOR})."
             )
+        else:
+            # v1.3: lifecycle-stage admissibility (present + confident artifacts)
+            stage_gap = check_artifact_stage(evidence_bundle, art_type)
+            if stage_gap is not None:
+                artifact_gaps.append(stage_gap)
+            # v1.3: provenance-presence admissibility
+            prov_gap = check_artifact_provenance(evidence_bundle, art_type)
+            if prov_gap is not None:
+                artifact_gaps.append(prov_gap)
 
     if artifact_gaps:
         return NormVerdict(
@@ -430,9 +545,19 @@ def run_compliance_check(
     """
     start = time.perf_counter_ns()
 
-    norm_verdicts = [
-        evaluate_norm(norm_def, evidence_bundle) for norm_def in NORMS
-    ]
+    # v1.2: per-norm fault isolation — an unexpected error in one norm must not
+    # deny assessment of the remaining norms.
+    norm_verdicts = []
+    for norm_def in NORMS:
+        try:
+            norm_verdicts.append(evaluate_norm(norm_def, evidence_bundle))
+        except Exception as exc:
+            norm_verdicts.append(NormVerdict(
+                norm_id=norm_def["id"], principle=norm_def["principle"],
+                verdict=Verdict.EVIDENCE_GAP, indicators=[],
+                explanation=f"Evaluation error (isolated): {type(exc).__name__}: {exc}",
+                remediation="Investigate malformed evidence for this norm.",
+            ))
 
     elapsed_ms = (time.perf_counter_ns() - start) / 1e6
 

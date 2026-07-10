@@ -38,7 +38,7 @@ EXPECTED_VIOLATIONS = {
 def run_validation():
     """Run all nine bundles, verify against ground truth, print report."""
     print("=" * 72)
-    print("  AGI GOVERNANCE COMPLIANCE — SYNTHETIC VALIDATION (v1.1)")
+    print("  AGI GOVERNANCE COMPLIANCE — SYNTHETIC VALIDATION (v1.3)")
     print("=" * 72)
 
     all_reports = []
