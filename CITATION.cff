@@ -1,80 +1,107 @@
 cff-version: 1.2.0
-message: "If you use this software or its associated formal specification, please cite it as below."
-title: "Machine-checkable compliance for AGI Governance: Reference implementation and LegalRuleML specification"
+message: >-
+  If you use this repository (compliance engine, LegalRuleML encoding, agiev
+  vocabulary, evidence bundles, or study instruments), please cite it using the
+  metadata below. If you refer to the research itself, please cite the journal
+  article given under preferred-citation. This article supersedes the earlier
+  Zenodo preprint (doi:10.5281/zenodo.16284248), which is deprecated and should
+  no longer be cited.
+title: >-
+  AGI Governance Compliance Engine and Evidence Vocabulary (agiev)
 type: software
-version: "1.3"
-date-released: "2026-07-01"
-license: MIT
+version: "1.4"
+date-released: "2026-07-14"
 repository-code: "https://github.com/pcoronaf/agi-governance"
 url: "https://w3id.org/agi-governance"
-abstract: >-
-  Reference implementation and formal specification for a machine-checkable
-  AGI governance compliance model.  Includes a LegalRuleML-compatible norm
-  encoding extended with an AGI Evidence Vocabulary (agiev), a Python-based
-  compliance engine, synthetic evidence bundles for three case-study domains,
-  and a validation runner.  Engine v1.1 added a corrected evaluation precondition (mandatory
-  null/absent-field checking before threshold evaluation; paper Section 8.3).
-  v1.2 added type-and-range guards, per-norm fault isolation, and absent-
-  confidence handling; v1.3 enforces lifecycle-stage scoping and provenance
-  presence. A blind conformance evaluation by three independent LLMs (paper
-  Section 8.4) is included under conformance/.
-keywords:
-  - artificial intelligence
-  - artificial general intelligence
-  - AI governance
-  - legal compliance checking
-  - LegalRuleML
-  - deontic logic
-  - audit evidence
-  - ISO/IEC 42001
+identifiers:
+  - type: url
+    value: "https://w3id.org/agi-governance"
+    description: Persistent identifier resolving to the versioned public repository
 authors:
   - family-names: Corona Fraga
     given-names: Pablo
+    affiliation: >-
+      INFOTEC - Research Center for Information and Communication Technologies,
+      Mexico City, Mexico
     email: pablo.coronaf@infotec.mx
-    orcid: "https://orcid.org/0000-0001-5012-9468"
-    affiliation: "INFOTEC - Research Center for Information and Communication Technologies"
   - family-names: Diab
-    given-names: "Amin M.E-A."
-    email: adiab3@jhu.edu
-    orcid: "https://orcid.org/0009-0008-4069-885X"
-    affiliation: "Johns Hopkins Whiting School of Engineering, Johns Hopkins University"
+    given-names: Amin M. E-A.
+    affiliation: Johns Hopkins University
   - family-names: Hwang
     given-names: Sun Ho
-    email: shwang42@alumni.jh.edu
-    orcid: "https://orcid.org/0009-0008-7161-2641"
-    affiliation: "Johns Hopkins Whiting School of Engineering, Johns Hopkins University"
+    affiliation: Johns Hopkins University
   - family-names: Diaz
     given-names: Vanessa
-    email: vdiazr@scjn.gob.mx
-    orcid: "https://orcid.org/0000-0002-7186-8785"
-    affiliation: "Supreme Court of Justice of the Nation, Mexico"
+    affiliation: Supreme Court of Justice of the Nation, Mexico
+keywords:
+  - AGI governance
+  - LegalRuleML
+  - machine-checkable compliance
+  - ISO/IEC 42001
+  - EU AI Act
+  - evidence-linked indicators
+  - auditable norms
+abstract: >-
+  Reference implementation and research artifacts for machine-checkable AGI
+  governance compliance: a LegalRuleML-compatible norm encoding
+  (agi_governance_legalruleml.xml), the agiev evidence vocabulary and
+  evidence-bundle schemas, and a deterministic compliance engine (v1.3)
+  evaluating eight norms across six principles via ten evidence-linked
+  indicators. Engine v1.1 added a corrected evaluation precondition (mandatory
+  null/absent-field checking before threshold evaluation; paper Section 8.3);
+  v1.2 added type-and-range guards, per-norm fault isolation, and
+  absent-confidence handling; v1.3 enforces lifecycle-stage scoping and
+  provenance presence. The repository includes the blind conformance evaluation
+  (three independently prompted LLMs, 120/120 verdict cells; paper Section 8.4)
+  under conformance/, and the multi-coder real-evidence bridgeability study
+  (three coders including two external ISO/IEC 42001 auditors; strict-pass
+  unanimity, generous-pass Fleiss kappa 0.709; paper Section 8.5) under
+  public_study/, comprising the labeling instruments of all three coders, the
+  coder agreement matrix, reliability-analysis scripts, the reconciliation log,
+  and the prospective auditor-validation study kit.
+references:
+  - type: generic
+    title: Principles for the creation of Artificial General Intelligence
+    authors:
+      - family-names: Diab
+        given-names: Amin M. E-A.
+      - family-names: Hwang
+        given-names: Sun Ho
+      - family-names: Lopez-Gonzalez
+        given-names: M.
+    year: 2025
+    doi: 10.5281/zenodo.16284248
+    notes: >-
+      Preliminary, non-peer-reviewed formulation of the three AGI-specific
+      control requirements, produced during the drafting of the journal
+      article. Superseded and deprecated; cite the preferred-citation instead.
 preferred-citation:
-  type: article
+  type: unpublished
   title: >-
-    Machine-checkable compliance for AGI Governance: Formalizing principles
-    as auditable norms and evidence-linked indicators
+    Machine-Checkable Compliance for AGI Governance: Formalizing Principles as
+    Auditable Norms and Evidence-Linked Indicators
   authors:
     - family-names: Corona Fraga
       given-names: Pablo
-      orcid: "https://orcid.org/0000-0001-5012-9468"
+      affiliation: >-
+        INFOTEC - Research Center for Information and Communication
+        Technologies, Mexico City, Mexico
+      email: pablo.coronaf@infotec.mx
     - family-names: Diab
-      given-names: "Amin M.E-A."
-      orcid: "https://orcid.org/0009-0008-4069-885X"
+      given-names: Amin M. E-A.
+      affiliation: Johns Hopkins University
     - family-names: Hwang
       given-names: Sun Ho
-      orcid: "https://orcid.org/0009-0008-7161-2641"
+      affiliation: Johns Hopkins University
     - family-names: Diaz
       given-names: Vanessa
-      orcid: "https://orcid.org/0000-0002-7186-8785"
+      affiliation: Supreme Court of Justice of the Nation, Mexico
   year: 2026
-  keywords:
-    - artificial intelligence
-    - artificial general intelligence
-    - AI governance
-    - legal compliance checking
-    - normative reasoning
-    - audit evidence
-    - risk management
-    - "ISO/IEC 42001"
-    - AI management systems
-    - deontic logic
+  notes: >-
+    Manuscript under review at a JCR-indexed artificial intelligence journal.
+    Update type, doi, journal, volume, and pages upon acceptance.
+  # doi: TBD-on-acceptance
+  # journal: TBD-on-acceptance
+  # volume: TBD
+  # start: TBD
+  # end: TBD
