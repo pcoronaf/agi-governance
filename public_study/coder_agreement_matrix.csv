@@ -1,0 +1,61 @@
+cell_id,generation,developer,document,indicator,indicator_class,C1_strict,C2_strict,C3_strict,C1_generous,C2_generous,C3_generous,majority_generous
+C01,2024,OpenAI,GPT-4o System Card,IND-TRANS-AI-ID,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C02,2024,OpenAI,GPT-4o System Card,IND-CTRL-CEASE-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C03,2024,OpenAI,GPT-4o System Card,IND-CTRL-CEASE-LATENCY,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C04,2024,OpenAI,GPT-4o System Card,IND-CTRL-SLO-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C05,2024,OpenAI,GPT-4o System Card,IND-CTRL-SLO-VIOLATIONS,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C06,2024,OpenAI,GPT-4o System Card,IND-TRANS-EXP,generic,NC,NC,NC,NC,NC,NC,NC
+C07,2024,OpenAI,GPT-4o System Card,IND-ACC-HUMAN,generic,NC,NC,NC,NC,NC,NC,NC
+C08,2024,OpenAI,GPT-4o System Card,IND-FAIR-DATA,generic,NC,NC,NC,NC,NC,NC,NC
+C09,2024,OpenAI,GPT-4o System Card,IND-ROB-TEST,generic,NC,NC,NC,C,C,C,C
+C10,2024,OpenAI,GPT-4o System Card,IND-ETH-COV,generic,NC,NC,NC,NC,NC,NC,NC
+C11,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-TRANS-AI-ID,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C12,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-CTRL-CEASE-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C13,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-CTRL-CEASE-LATENCY,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C14,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-CTRL-SLO-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C15,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-CTRL-SLO-VIOLATIONS,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C16,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-TRANS-EXP,generic,NC,NC,NC,NC,NC,NC,NC
+C17,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-ACC-HUMAN,generic,NC,NC,NC,NC,NC,NC,NC
+C18,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-FAIR-DATA,generic,NC,NC,NC,NC,NC,NC,NC
+C19,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-ROB-TEST,generic,NC,NC,NC,NC,C,C,C
+C20,2024,Anthropic,Claude 3.5 Sonnet Model Card,IND-ETH-COV,generic,NC,NC,NC,NC,NC,NC,NC
+C21,2024,Meta,Llama 3.1 Model Card,IND-TRANS-AI-ID,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C22,2024,Meta,Llama 3.1 Model Card,IND-CTRL-CEASE-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C23,2024,Meta,Llama 3.1 Model Card,IND-CTRL-CEASE-LATENCY,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C24,2024,Meta,Llama 3.1 Model Card,IND-CTRL-SLO-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C25,2024,Meta,Llama 3.1 Model Card,IND-CTRL-SLO-VIOLATIONS,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C26,2024,Meta,Llama 3.1 Model Card,IND-TRANS-EXP,generic,NC,NC,NC,NC,NC,NC,NC
+C27,2024,Meta,Llama 3.1 Model Card,IND-ACC-HUMAN,generic,NC,NC,NC,NC,NC,NC,NC
+C28,2024,Meta,Llama 3.1 Model Card,IND-FAIR-DATA,generic,NC,NC,NC,NC,NC,NC,NC
+C29,2024,Meta,Llama 3.1 Model Card,IND-ROB-TEST,generic,NC,NC,NC,NC,C,NC,NC
+C30,2024,Meta,Llama 3.1 Model Card,IND-ETH-COV,generic,NC,NC,NC,NC,NC,NC,NC
+C31,2025-26,OpenAI,GPT-5.5 System Card,IND-TRANS-AI-ID,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C32,2025-26,OpenAI,GPT-5.5 System Card,IND-CTRL-CEASE-RATE,agi_specific,NC,NC,NC,NC,NC,C,NC
+C33,2025-26,OpenAI,GPT-5.5 System Card,IND-CTRL-CEASE-LATENCY,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C34,2025-26,OpenAI,GPT-5.5 System Card,IND-CTRL-SLO-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C35,2025-26,OpenAI,GPT-5.5 System Card,IND-CTRL-SLO-VIOLATIONS,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C36,2025-26,OpenAI,GPT-5.5 System Card,IND-TRANS-EXP,generic,NC,NC,NC,NC,NC,NC,NC
+C37,2025-26,OpenAI,GPT-5.5 System Card,IND-ACC-HUMAN,generic,NC,NC,NC,NC,NC,NC,NC
+C38,2025-26,OpenAI,GPT-5.5 System Card,IND-FAIR-DATA,generic,NC,NC,NC,NC,NC,NC,NC
+C39,2025-26,OpenAI,GPT-5.5 System Card,IND-ROB-TEST,generic,NC,NC,NC,C,C,C,C
+C40,2025-26,OpenAI,GPT-5.5 System Card,IND-ETH-COV,generic,NC,NC,NC,NC,NC,NC,NC
+C41,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-TRANS-AI-ID,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C42,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-CTRL-CEASE-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C43,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-CTRL-CEASE-LATENCY,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C44,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-CTRL-SLO-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C45,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-CTRL-SLO-VIOLATIONS,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C46,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-TRANS-EXP,generic,NC,NC,NC,NC,NC,NC,NC
+C47,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-ACC-HUMAN,generic,NC,NC,NC,NC,NC,NC,NC
+C48,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-FAIR-DATA,generic,NC,NC,NC,NC,NC,NC,NC
+C49,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-ROB-TEST,generic,NC,NC,NC,C,C,C,C
+C50,2025-26,Anthropic,Claude Opus 4.6 System Card,IND-ETH-COV,generic,NC,NC,NC,NC,NC,NC,NC
+C51,2025-26,Google,Gemini 3 Model Card,IND-TRANS-AI-ID,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C52,2025-26,Google,Gemini 3 Model Card,IND-CTRL-CEASE-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C53,2025-26,Google,Gemini 3 Model Card,IND-CTRL-CEASE-LATENCY,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C54,2025-26,Google,Gemini 3 Model Card,IND-CTRL-SLO-RATE,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C55,2025-26,Google,Gemini 3 Model Card,IND-CTRL-SLO-VIOLATIONS,agi_specific,NC,NC,NC,NC,NC,NC,NC
+C56,2025-26,Google,Gemini 3 Model Card,IND-TRANS-EXP,generic,NC,NC,NC,NC,NC,NC,NC
+C57,2025-26,Google,Gemini 3 Model Card,IND-ACC-HUMAN,generic,NC,NC,NC,NC,NC,NC,NC
+C58,2025-26,Google,Gemini 3 Model Card,IND-FAIR-DATA,generic,NC,NC,NC,NC,NC,NC,NC
+C59,2025-26,Google,Gemini 3 Model Card,IND-ROB-TEST,generic,NC,NC,NC,C,C,NC,C
+C60,2025-26,Google,Gemini 3 Model Card,IND-ETH-COV,generic,NC,NC,NC,NC,NC,NC,NC

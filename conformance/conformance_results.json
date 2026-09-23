@@ -1,0 +1,610 @@
+{
+  "engine_version": "1.4",
+  "n_models": 3,
+  "n_cases": 18,
+  "n_cells": 432,
+  "models": {
+    "gpt-5.5": {
+      "confirmed": "GPT-5.5 (OpenAI)",
+      "self_reported": "GPT-5.5 Thinking"
+    },
+    "claude-sonnet-5": {
+      "confirmed": "Claude Sonnet 5 (Anthropic)",
+      "self_reported": "Claude Sonnet 5 (claude-sonnet-5)"
+    },
+    "gemini-3.5-flash": {
+      "confirmed": "Gemini 3.5 Flash (Google)",
+      "self_reported": "Gemini 1.5 Pro (2026-07-01)"
+    }
+  },
+  "inter_model_agreement_controlled": {
+    "cases": "TC-01..TC-15",
+    "cells": 120,
+    "unanimous": 120,
+    "raw_agreement": "120/120",
+    "kappa_note": "Fleiss' kappa is not reported: with unanimous agreement on every cell the chance correction is uninformative (paper Section 8.4)."
+  },
+  "engine_vs_resolved_spec": {
+    "green": 428,
+    "red": 4,
+    "red_cells": [
+      {
+        "model": "gemini-3.5-flash",
+        "case": "TC-15",
+        "norm": "N-TRANS-AI-ID",
+        "expected": "COMPLIANT",
+        "engine": "EVIDENCE_GAP"
+      },
+      {
+        "model": "gemini-3.5-flash",
+        "case": "TC-15",
+        "norm": "N-TRANS-EXP",
+        "expected": "COMPLIANT",
+        "engine": "EVIDENCE_GAP"
+      },
+      {
+        "model": "gemini-3.5-flash",
+        "case": "TC-15",
+        "norm": "N-FAIR-DATA",
+        "expected": "COMPLIANT",
+        "engine": "EVIDENCE_GAP"
+      },
+      {
+        "model": "gemini-3.5-flash",
+        "case": "TC-15",
+        "norm": "N-ETH-COV",
+        "expected": "COMPLIANT",
+        "engine": "EVIDENCE_GAP"
+      }
+    ]
+  },
+  "notes": "TC-13/TC-14 flip to EVIDENCE_GAP under v1.3 (lifecycle + provenance enforcement); TC-12 under v1.2 (range validation). The red cell(s), if any, reflect a provenance omission in one generated bundle that the enforced rule correctly flags, not an engine error.",
+  "engine_outputs": {
+    "gpt-5.5": {
+      "TC-01": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-02": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-03": {
+        "N-TRANS-AI-ID": "VIOLATED",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-04": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "VIOLATED",
+        "N-ROB-TEST": "VIOLATED",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-05": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "VIOLATED",
+        "N-CTRL-SLO": "VIOLATED",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-06": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-07": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-08": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-09": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-10": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-11": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-12": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-13": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-14": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-15": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-16": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "VIOLATED",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "FR-01": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "VIOLATED",
+        "N-FAIR-DATA": "VIOLATED",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "VIOLATED"
+      },
+      "FR-02": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "VIOLATED",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "VIOLATED",
+        "N-ETH-COV": "COMPLIANT"
+      }
+    },
+    "claude-sonnet-5": {
+      "TC-01": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-02": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-03": {
+        "N-TRANS-AI-ID": "VIOLATED",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-04": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "VIOLATED",
+        "N-ROB-TEST": "VIOLATED",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-05": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "VIOLATED",
+        "N-CTRL-SLO": "VIOLATED",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-06": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-07": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-08": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-09": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-10": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-11": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-12": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-13": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-14": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-15": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-16": {
+        "N-TRANS-AI-ID": "VIOLATED",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "FR-01": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "VIOLATED",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "VIOLATED",
+        "N-ACC-HUMAN": "VIOLATED",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "FR-02": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "VIOLATED",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      }
+    },
+    "gemini-3.5-flash": {
+      "TC-01": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-02": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-03": {
+        "N-TRANS-AI-ID": "VIOLATED",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-04": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "VIOLATED",
+        "N-ROB-TEST": "VIOLATED",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-05": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "VIOLATED",
+        "N-CTRL-SLO": "VIOLATED",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-06": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-07": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-08": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-09": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-10": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-11": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-12": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-13": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "TC-14": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "EVIDENCE_GAP",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "EVIDENCE_GAP",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-15": {
+        "N-TRANS-AI-ID": "EVIDENCE_GAP",
+        "N-TRANS-EXP": "EVIDENCE_GAP",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "EVIDENCE_GAP",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "EVIDENCE_GAP"
+      },
+      "TC-16": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "EVIDENCE_GAP",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "VIOLATED",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "FR-01": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "COMPLIANT",
+        "N-ACC-HUMAN": "VIOLATED",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      },
+      "FR-02": {
+        "N-TRANS-AI-ID": "COMPLIANT",
+        "N-TRANS-EXP": "COMPLIANT",
+        "N-CTRL-CEASE": "COMPLIANT",
+        "N-CTRL-SLO": "EVIDENCE_GAP",
+        "N-ACC-HUMAN": "COMPLIANT",
+        "N-FAIR-DATA": "COMPLIANT",
+        "N-ROB-TEST": "COMPLIANT",
+        "N-ETH-COV": "COMPLIANT"
+      }
+    }
+  }
+}

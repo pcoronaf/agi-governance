@@ -1,0 +1,110 @@
+{
+  "engine_version": "1.4",
+  "counting_note": "Violation detection is reported at both the indicator level (individual out-of-threshold fields; 15 injected) and the norm level (VIOLATED verdicts; 13, because in Critical Infrastructure five injected indicator violations fall on three norms). Gap detection is reported at the injection level; propagated EVIDENCE_GAP verdicts on dependent norms are correct behaviour and reported separately.",
+  "aggregate": {
+    "n_case_studies": 3,
+    "clean_bundles_fully_compliant": 3,
+    "violation_detection_norm_level": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "total_TP": 13,
+      "total_FP": 0,
+      "total_FN": 0
+    },
+    "violation_detection_indicator_level": {
+      "injected": 15,
+      "detected": 15,
+      "recall": 1.0
+    },
+    "gap_detection_injection_level": {
+      "injected": 6,
+      "detected": 6,
+      "recall": 1.0
+    },
+    "total_evidence_gap_verdicts": 7,
+    "propagated_gap_verdicts": 1,
+    "explanation_completeness": 1.0,
+    "mean_report_generation_ms": 0.0636
+  },
+  "per_case_study": [
+    {
+      "case_study": "Legal Assistant",
+      "clean_norms_compliant": 8,
+      "clean_norms_total": 8,
+      "violation_detection_norm_level": {
+        "injected_norms": 5,
+        "detected": 5,
+        "TP": 5,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "violation_detection_indicator_level": {
+        "injected": 5,
+        "detected": 5
+      },
+      "gap_detection_injection_level": {
+        "injected": 2,
+        "detected": 2,
+        "recall": 1.0
+      },
+      "total_evidence_gap_verdicts": 2,
+      "propagated_gap_verdicts": 0
+    },
+    {
+      "case_study": "Incident-Response Agent",
+      "clean_norms_compliant": 8,
+      "clean_norms_total": 8,
+      "violation_detection_norm_level": {
+        "injected_norms": 5,
+        "detected": 5,
+        "TP": 5,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "violation_detection_indicator_level": {
+        "injected": 5,
+        "detected": 6
+      },
+      "gap_detection_injection_level": {
+        "injected": 2,
+        "detected": 2,
+        "recall": 1.0
+      },
+      "total_evidence_gap_verdicts": 2,
+      "propagated_gap_verdicts": 0
+    },
+    {
+      "case_study": "Critical Infrastructure",
+      "clean_norms_compliant": 8,
+      "clean_norms_total": 8,
+      "violation_detection_norm_level": {
+        "injected_norms": 3,
+        "detected": 3,
+        "TP": 3,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "violation_detection_indicator_level": {
+        "injected": 5,
+        "detected": 4
+      },
+      "gap_detection_injection_level": {
+        "injected": 2,
+        "detected": 2,
+        "recall": 1.0
+      },
+      "total_evidence_gap_verdicts": 3,
+      "propagated_gap_verdicts": 1
+    }
+  ]
+}

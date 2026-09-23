@@ -1,0 +1,297 @@
+{
+  "study": "real-evidence bridgeability, prior vs current generations (coverage, NOT auditor-confirmed compliance)",
+  "mapping": "three-coder majority resolution (see reconciliation_log.md)",
+  "engine_version": "1.4",
+  "cards": {
+    "OpenAI GPT-4o (2024 system card)": {
+      "generation": "prior",
+      "url": "https://cdn.openai.com/gpt-4o-system-card.pdf",
+      "conservative": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      },
+      "generous": {
+        "artifact_types": 2,
+        "indicators": 1,
+        "indicators_list": [
+          "IND-ROB-TEST"
+        ],
+        "agi_specific": 0,
+        "norms_evaluable": 1,
+        "evaluable_norms": [
+          "N-ROB-TEST"
+        ],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "COMPLIANT",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      }
+    },
+    "Anthropic Claude 3.5 Sonnet (2024 model card)": {
+      "generation": "prior",
+      "url": "https://www-cdn.anthropic.com/fed9cc193a14b84131812372d8d5857f8f304c52/Model_Card_Claude_3_Addendum.pdf",
+      "conservative": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      },
+      "generous": {
+        "artifact_types": 2,
+        "indicators": 1,
+        "indicators_list": [
+          "IND-ROB-TEST"
+        ],
+        "agi_specific": 0,
+        "norms_evaluable": 1,
+        "evaluable_norms": [
+          "N-ROB-TEST"
+        ],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "COMPLIANT",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      }
+    },
+    "Meta Llama 3.1 (2024 model card)": {
+      "generation": "prior",
+      "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/MODEL_CARD.md",
+      "conservative": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      },
+      "generous": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      }
+    },
+    "OpenAI GPT-5.5 (2026 system card)": {
+      "generation": "current",
+      "url": "https://openai.com/index/gpt-5-5-system-card/",
+      "conservative": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      },
+      "generous": {
+        "artifact_types": 2,
+        "indicators": 1,
+        "indicators_list": [
+          "IND-ROB-TEST"
+        ],
+        "agi_specific": 0,
+        "norms_evaluable": 1,
+        "evaluable_norms": [
+          "N-ROB-TEST"
+        ],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "COMPLIANT",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      }
+    },
+    "Anthropic Claude Opus 4.6 (2026 system card)": {
+      "generation": "current",
+      "url": "https://www.anthropic.com/claude-opus-4-6-system-card",
+      "conservative": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      },
+      "generous": {
+        "artifact_types": 2,
+        "indicators": 1,
+        "indicators_list": [
+          "IND-ROB-TEST"
+        ],
+        "agi_specific": 0,
+        "norms_evaluable": 1,
+        "evaluable_norms": [
+          "N-ROB-TEST"
+        ],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "COMPLIANT",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      }
+    },
+    "Google Gemini 3 (2025 model card + frontier safety)": {
+      "generation": "current",
+      "url": "https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-Pro-Model-Card.pdf",
+      "conservative": {
+        "artifact_types": 1,
+        "indicators": 0,
+        "indicators_list": [],
+        "agi_specific": 0,
+        "norms_evaluable": 0,
+        "evaluable_norms": [],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "EVIDENCE_GAP",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      },
+      "generous": {
+        "artifact_types": 2,
+        "indicators": 1,
+        "indicators_list": [
+          "IND-ROB-TEST"
+        ],
+        "agi_specific": 0,
+        "norms_evaluable": 1,
+        "evaluable_norms": [
+          "N-ROB-TEST"
+        ],
+        "norm_verdicts": {
+          "N-TRANS-AI-ID": "EVIDENCE_GAP",
+          "N-TRANS-EXP": "EVIDENCE_GAP",
+          "N-CTRL-CEASE": "EVIDENCE_GAP",
+          "N-CTRL-SLO": "EVIDENCE_GAP",
+          "N-ACC-HUMAN": "EVIDENCE_GAP",
+          "N-FAIR-DATA": "EVIDENCE_GAP",
+          "N-ROB-TEST": "COMPLIANT",
+          "N-ETH-COV": "EVIDENCE_GAP"
+        }
+      }
+    }
+  },
+  "by_generation": {
+    "prior": {
+      "conservative": {
+        "types": 3,
+        "ind": 0,
+        "agi": 0,
+        "norms": 0
+      },
+      "generous": {
+        "types": 5,
+        "ind": 2,
+        "agi": 0,
+        "norms": 2
+      }
+    },
+    "current": {
+      "conservative": {
+        "types": 3,
+        "ind": 0,
+        "agi": 0,
+        "norms": 0
+      },
+      "generous": {
+        "types": 6,
+        "ind": 3,
+        "agi": 0,
+        "norms": 3
+      }
+    }
+  }
+}
