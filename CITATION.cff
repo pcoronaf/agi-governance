@@ -10,8 +10,8 @@ message: >-
 title: >-
   AGI Governance Compliance Engine and Evidence Vocabulary (agiev)
 type: software
-version: "1.6"
-date-released: "2026-09-27"
+version: "1.7"
+date-released: "2026-09-30"
 repository-code: "https://github.com/pcoronaf/agi-governance"
 url: "https://w3id.org/agi-governance"
 identifiers:
@@ -60,7 +60,8 @@ abstract: >-
   unanimity, generous-pass Fleiss kappa 0.709; paper Section 8.5) under
   public_study/, comprising the labeling instruments of all three coders, the
   coder agreement matrix, reliability-analysis scripts, the reconciliation log,
-  and the prospective auditor-validation study kit.
+  and the prospective auditor-validation study kit. The systematic review of Section 4.1 is documented under
+  systematic_review/ (study lists, per-record screening decisions and scripts).
 references:
   - type: generic
     title: Principles for the creation of Artificial General Intelligence

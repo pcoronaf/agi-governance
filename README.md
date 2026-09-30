@@ -3,7 +3,7 @@
 **Vocabulary namespace:** `https://w3id.org/agi-governance/evidence/ns/v1.0/`  
 **Norm base URI:** `https://w3id.org/agi-governance/norms/`  
 **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (docs & vocabulary); MIT (code)  
-**Engine version:** 1.4 · Updated 2026-09-27
+**Engine version:** 1.4 · Updated 2026-09-30
 
 This repository is the supplementary resource for:
 
@@ -26,6 +26,7 @@ This repository is the supplementary resource for:
 | `results/aggregate_metrics.json` | Aggregate evaluation metrics |
 | `conformance/` | Blind conformance evaluation (§8.4): prompt, three model outputs, harness, results |
 | `component2/` | Turnkey kit for the deferred auditor-confirmed validation (protocol, rubric, labeling instruments, analysis) |
+| `systematic_review/` | Systematic review (§4.1): included studies with extraction coding (Table 1), full-text exclusions with reasons, per-reviewer full-text decisions, per-record title/abstract screening decisions and rationales, deduplication and pre-screening scripts (no abstracts) |
 | `public_study/` | Real-evidence bridgeability study (§8.5): majority-resolved mapping script (`run_public_study.py`), results, three-coder judgment matrix, reliability analysis, reconciliation log, coding protocol, completed instruments |
 | `CITATION.cff` | Citation metadata |
 
